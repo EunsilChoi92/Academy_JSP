@@ -11,7 +11,7 @@
 	<form id="frm" action="/boardWrite" method="post" onsubmit="return chk()" >
 		<div><label>제목: <input type="text" name="title"></label></div>
 		<div><label>내용: <textarea name="ctnt"></textarea></label></div>
-		<div><label>작성자: <input type="text" name="i_student"></label></div>
+		<div><label>작성자: ㅋ<input type="text" name="i_student"></label></div>
 		<div><input type="submit" value="글등록"></div>
 	</form>
 	

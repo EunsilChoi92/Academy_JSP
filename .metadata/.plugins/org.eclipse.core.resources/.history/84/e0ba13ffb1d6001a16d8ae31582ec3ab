@@ -1,0 +1,43 @@
+package com.koreait.board;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+// jsp : view 담당
+// survlet : 로직 담당
+// RequestDispatcher	: 주소값은 안 바꿈, 연결고리가 있음
+// response.sendredirect	: 연결고리가 없음
+@WebServlet("/boardList") // 주소값 매핑 : 주소에 boardList.jsp 라는 파일 이름이 나타나지 않음
+// 이렇게 안 할거면 xml에 적어야 함
+public class BoardListSer extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+	// doGetr과 doPost 중에서 꼭 필요한 것만 사용하면 됨
+	
+    @Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	String strI_board = request.getParameter("i_board");
+    	System.out.println("Servelet i_board : " + strI_board);
+    	
+    	RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/boardList.jsp");
+    	rd.forward(request, response);
+		
+    	//response.getWriter().append("Served at: ").append(request.getContextPath());
+    	
+    	// 중요한 것은 request! response는 별로 안 중요함
+    	// "/WEB-INF/view/boardList.jsp" 정보를 response 객체를 이용해서 리턴
+	}
+
+
+    @Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+}

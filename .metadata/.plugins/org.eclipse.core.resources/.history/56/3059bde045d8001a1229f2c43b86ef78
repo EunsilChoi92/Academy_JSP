@@ -1,0 +1,49 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.sql.*" %>
+<%@ page import="com.koreait.board.vo.*" %>
+<%
+	String strI_board = request.getParameter("i_board");
+	if(strI_board == null) {
+%>
+	<scirpt>
+		alert('잘못된 접근입니다.');
+		location.href='/WEB-INF/view/boardList.jsp'
+	</scirpt>
+<%
+		return;
+	}
+	int i_board = Integer.parseInt(strI_board);
+	Connection con = null;
+	PreparedStatement ps = null;
+	ResultSet rs = null;
+	
+	String name = "";
+	
+	String sql = " SELECT a.i_student as I_STUDENT, title, ctnt, nm FROM t_board A JOIN T_STUDENT B ON A.i_student = B.i_student WHERE i_board = ? ";
+	
+	try {
+		con = DbCon.getCon();
+		ps = con.prepareStatement(sql);
+		
+		
+	}catch(Exception e) {
+		
+	}finally {
+		
+	}
+	
+	
+	
+	
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>상세 페이지</title>
+</head>
+<body>
+	<div>상세 페이지</div>
+</body>
+</html>

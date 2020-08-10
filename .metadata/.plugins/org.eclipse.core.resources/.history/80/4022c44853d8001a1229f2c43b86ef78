@@ -1,0 +1,56 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.sql.*" %>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>상세 페이지</title>
+<style>
+	
+    table {
+        border-collapse: collapse;
+    }
+    tr, td, th {
+        border: 1px solid black;
+        width: 100px;
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+	<div class="container">
+	<div>
+	<a href="#">리스트로 가기</a>
+	<a href="#" onclick="procDel(<%=i_board%>)">삭제</a>
+	<a href="#>">수정</a>
+	</div>
+		<table>
+			<caption>상세 페이지 : <%=strI_board %></caption>
+	        <tr>
+	            <th>글 번호</th>
+	            <th>글 제목</th>
+	            <th>글 내용</th>
+	            <th>작성자</th>
+	        </tr>
+	        <tr>
+	            <td><%=strI_board %></td>
+	            <td><%=vo.getTitle() %></td>
+	            <td style="width: 200px"><%=vo.getCtnt() %></td>
+	            <td><%=name %></td>
+	        </tr>
+	    </table>
+	</div>
+	<script>
+		function procDel(i_board) {
+			alert('i_board : ' + i_board)
+			var result = confirm('삭제하시겠습니까?')
+			if(result) {
+				location.href = '/WEB-INF/view/boardDel.jsp' + i_board
+			}
+		}
+	</script>
+</body>
+</html>

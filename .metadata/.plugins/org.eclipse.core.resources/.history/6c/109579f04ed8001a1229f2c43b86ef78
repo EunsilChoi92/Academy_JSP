@@ -1,0 +1,22 @@
+package com.koreait.board.common;
+
+public class Utils {
+	// 못바꾼다면 두번째 인자가  리턴되도록
+	// 바꾼다면 첫번째 인자가 숫자로 바뀐걸 리턴하도록
+	
+	public static int parseStringToInt(String strI_board, int returnVal) {
+		try {
+			int i_board = Integer.parseInt(strI_board);
+			return i_board;
+			
+		} catch(NumberFormatException e) {
+			e.printStackTrace();
+			return returnVal;
+		}
+	}
+	
+	public static void main(String[] args) {
+		int num = parseStringToInt("하하", 1);
+		System.out.println(num);
+	}
+}

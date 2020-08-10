@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<list key="EGit.KnownHosts">
-		<item value="bitbucket.org"/>
 		<item value="git.eclipse.org"/>
+		<item value="bitbucket.org"/>
 		<item value="github.com"/>
 	</list>
 	<list key="RepositorySelectionPage.UsedUris">
+		<item value="https://github.com/EunsilChoi92/Academy_JSP.git"/>
+		<item value="file://C:\spring\workspace_web"/>
 		<item value="https://github.com/EunsilChoi92/JSP.git"/>
 		<item value="https://github.com/eunsil0229/Servlet.git"/>
 		<item value="https://github.com/eunsil0229/JSP.git"/>

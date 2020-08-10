@@ -7250,3 +7250,12 @@ org.eclipse.core.runtime.CoreException: The Tomcat server configuration at \Serv
 
 !ENTRY org.eclipse.jst.server.tomcat.core 4 0 2020-08-10 11:59:51.484
 !MESSAGE The Tomcat server configuration at \Servers\Tomcat v9.0 Server at localhost-config is missing. Check the server for errors.
+
+!ENTRY org.eclipse.wst.html.ui 1 1 2020-08-10 12:01:27.223
+!MESSAGE No line style provider for org.eclipse.wst.html.SCRIPT
+
+!ENTRY org.eclipse.wst.html.ui 1 1 2020-08-10 12:01:27.225
+!MESSAGE No line style provider for org.eclipse.wst.html.SCRIPT
+
+!ENTRY org.eclipse.wst.html.ui 1 1 2020-08-10 12:01:27.227
+!MESSAGE No line style provider for org.eclipse.wst.html.SCRIPT

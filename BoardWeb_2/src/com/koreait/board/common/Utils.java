@@ -6,6 +6,7 @@ public class Utils {
 		return parseStringToInt(strI_board, 0);
 	}
 	
+	
 	public static int parseStringToInt(String strI_board, int returnVal) {	
 		try {
 			int i_board = Integer.parseInt(strI_board);

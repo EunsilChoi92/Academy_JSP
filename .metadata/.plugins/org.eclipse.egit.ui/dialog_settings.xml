@@ -13,9 +13,11 @@
 		<item value="https://github.com/eunsil0229/JSP.git"/>
 	</list>
 	<list key="CommitDialog.authorValues">
+		<item value="EunsilChoi92 &lt;atheung1@naver.com&gt;"/>
 		<item value="Administrator &lt;Administrator@DESKTOP-ISVFPRU&gt;"/>
 	</list>
 	<list key="CommitDialog.committerValues">
+		<item value="EunsilChoi92 &lt;atheung1@naver.com&gt;"/>
 		<item value="Administrator &lt;Administrator@DESKTOP-ISVFPRU&gt;"/>
 	</list>
 	<section name="org.eclipse.egit.ui.internal.staging.StagingView">

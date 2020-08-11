@@ -59,8 +59,15 @@ public class BoardWriteSer extends HttpServlet {
 //		1이 넘어와야 잘 실행된 것!
 		System.out.println("result : " + result);
 		
-		//response.sendRedirect("/boardList"); // 특정 처리 후 또는 특정 조건일 때에 지정한 페이지로 이동하고 싶은 경우 사용
 		
+		if(result == 1) {
+			response.sendRedirect("/boardList");// 특정 처리 후 또는 특정 조건일 때에 지정한 페이지로 이동하고 싶은 경우 사용
+		} else {
+			String jsp = "WEB-INF/view/boardDetail.jsp";
+			request.getRequestDispatcher(jsp).forward(request, response);
+		}
+		
+
 		
 		
 		

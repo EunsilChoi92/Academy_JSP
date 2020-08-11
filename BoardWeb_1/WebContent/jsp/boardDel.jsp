@@ -70,7 +70,6 @@
 <head>
 <meta charset="UTF-8">
 <title>상세 페이지</title>
-
 </head>
 <body>
 <!-- 

@@ -7,17 +7,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/MainServlet")
+@WebServlet("/")
 public class MainServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
   
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("따라란~~");
+		proc(request, response, RequestMethod.GET);
+		
+		
 	}
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		proc(request, response, RequestMethod.POST);
 	}
-
+	
+	
+	private void proc(HttpServletRequest request, HttpServletResponse response, int method) throws ServletException, IOException {
+		System.out.println("url : " + request.getRequestURI() + ", method : " + method);// URI 값으로 분기시킴
+	}
 }

@@ -56,7 +56,7 @@ public class BoardListSer extends HttpServlet {
 
     
     // request	: 요청 들어왔고 응답했을 때 죽음(개인용, 개인마다 발행)
-    // session	: 브라우저 끄는 순간 죽음(개인용, 개인마다 발행)
+    // session	: 브라우저 켰을 때 살아나고 브라우저 끄는 순간 죽음(개인용, 개인마다 발행)
     // pageContext(page)	: 페이지 열릴 때 살아나고 응답했을 때 죽음(개인용, 개인마다 발행)
     // application	: 서버 키는 순간 생성, 끄는 순간 죽음(개인용이 아니라 전체용, 하나밖에 생성 안됨)
 }

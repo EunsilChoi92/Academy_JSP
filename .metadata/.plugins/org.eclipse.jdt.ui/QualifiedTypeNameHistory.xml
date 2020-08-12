@@ -11,9 +11,9 @@
 <fullyQualifiedTypeName name="java.sql.ResultSet"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="com.koreait.board.db.DbCon"/>
-<fullyQualifiedTypeName name="com.koreait.board.db.BoardDAO"/>
 <fullyQualifiedTypeName name="java.util.List"/>
-<fullyQualifiedTypeName name="com.koreait.board.vo.BoardVO"/>
 <fullyQualifiedTypeName name="com.koreait.board.common.Utils"/>
 <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
+<fullyQualifiedTypeName name="com.koreait.board.db.BoardDAO"/>
+<fullyQualifiedTypeName name="com.koreait.board.vo.BoardVO"/>
 </qualifiedTypeNameHistroy>

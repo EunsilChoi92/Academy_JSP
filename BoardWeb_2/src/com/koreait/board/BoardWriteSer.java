@@ -65,11 +65,7 @@ public class BoardWriteSer extends HttpServlet {
 		} else {
 			String jsp = "WEB-INF/view/boardDetail.jsp";
 			request.getRequestDispatcher(jsp).forward(request, response);
-		}
-		
-
-		
-		
+		}		
 		
 	}
 

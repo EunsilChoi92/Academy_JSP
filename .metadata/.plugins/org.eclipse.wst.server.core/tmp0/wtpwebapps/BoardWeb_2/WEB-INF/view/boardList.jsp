@@ -13,40 +13,67 @@
 <meta charset="UTF-8">
 <title>게시판</title>
 <style>
-	body {
+	@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap');
+	html, body {
 		width: 100%;
 		height: 100%;
 		margin: 0;
 		padding: 0;
+		font-family: 'Noto Sans KR', sans-serif;
 	}
 	.container {
-		width: 500px;
-		height: 500px;
-		border: 1px solid black;
+		width: inherit;
+		height: inherit;
 		display: flex;
         justify-content: center;
-        align-items: center;
 	}
 	.container .contents {
-		width: auto;
-		border: 3px solid black;
-	
+		width: 50%;
+		height: 70%;
+		margin-top: 30px;
 	}
 	.container .contents .header {
 		width: 100%;
+		height: 120px;
+	}
+	.container .contents .header h1 {
+		text-align: center;
+	}
+	.container .contents .header a  {
 		display: flex;
 		justify-content: flex-end;
+		color: black;
+		text-decoration: none;
 	}
-    table {
+	.container .contents .header a button {
+		background: white;
+		border: 1px solid lightgray;
+		font-size: 1em;
+		width: 100px;
+	}
+	.container .contents .header a button:hover {
+		background: #ecf0f1;
+		cursor: pointer;
+	}
+    .container .contents table {
         border-collapse: collapse;
+        border-left: none;
+    	border-right: none;
+        width: 100%;
     }
-    .itemRow:hover {
+    .container .contents table .itemRow:hover {
     	background: #ecf0f1;
     	cursor: pointer;
     }
-    tr, td, th {
-        border: 1px solid black;
+    .container .contents table tr th:nth-child(odd) {
+    	width: 20%;
+    }
+    .container .contents table tr, td, th {
+        border: 1px solid lightgray;
+        border-left: none;
+    	border-right: none;
         width: 100px;
+        height: 30px;
         text-align: center;
     }
 </style>
@@ -54,8 +81,8 @@
 <body>
 	<div class="container">
 		<div class="contents">
-		<p>게시판 리스트</p>
 			<header class="header">
+				<h1>게시판 리스트</h1>
 				<a href="/boardWrite"><button>글쓰기</button></a> <!-- 글쓰는 화면 띄우는 용도인 boardWrite.jsp와 -->
 					<!-- 폼으로 받아서 insert 날리고 실제 처리하는 boardWriteProc.jsp 파일 두 개가 필요함 -->
 			</header>

@@ -17,8 +17,6 @@ import com.koreait.board.vo.BoardVO;
 @WebServlet("/boardDetail") //어노테이션으로 주소 설정 안하면
 public class BoardDetailSer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String strI_board = request.getParameter("i_board");
 		

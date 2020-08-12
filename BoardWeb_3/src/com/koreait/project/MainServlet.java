@@ -24,6 +24,6 @@ public class MainServlet extends HttpServlet {
 	
 	
 	private void proc(HttpServletRequest request, HttpServletResponse response, int method) throws ServletException, IOException {
-		System.out.println("url : " + request.getRequestURI() + ", method : " + method);// URI 값으로 분기시킴
+		System.out.println("url : " + request.getRequestURI() + ", method : " + method); // URI 값으로 분기시킴
 	}
 }

@@ -10,9 +10,9 @@ public class UserDAO {
 		int result = 0;
 		
 		String sql = " INSERT INTO t_user "
-				+ " (i_user, user_id, user_pw, nm, emSail) "
+				+ " (i_user, user_id, user_pw, nm, email) "
 				+ " VALUES "
-				+ " (seq_user.nextal, ?, ?, ?, ?) ";
+				+ " (seq_user.nextval, ?, ?, ?, ?) ";
 		
 		
 		return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {

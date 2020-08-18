@@ -39,7 +39,7 @@ public class UserDAO {
 			@Override
 			public ResultSet prepared(PreparedStatement ps) throws SQLException {
 				ps.setNString(1, param.getUser_id());
-				return  ps.executeQuery();
+				return ps.executeQuery();
 			}
 			
 			@Override
@@ -60,8 +60,6 @@ public class UserDAO {
 					return 3;					
 				}
 			}
-			
-			
 		});
 		
 	}

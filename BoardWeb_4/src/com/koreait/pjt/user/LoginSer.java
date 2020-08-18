@@ -6,7 +6,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.koreait.pjt.Const;
 import com.koreait.pjt.MyUtils;
 import com.koreait.pjt.ViewResolver;
 import com.koreait.pjt.db.UserDAO;
@@ -33,8 +35,34 @@ public class LoginSer extends HttpServlet {
 		param.setUser_pw(encrypt_pw);
 		
 		int result = UserDAO.selUser(param);
+		// 아이디값 지우고 비번 남겨놓고 // 비번 틀렸으면 아이디 
+		if(result != 1) {//에러처리
+			String msg = "";
+			
+			switch(result) {
+				case 2:
+					msg = "비밀번호가 틀렸습니다.";
+					break;
+				case 3:
+					msg = "존재하지 않는 아이디입니다.";			
+					break;
+				default:
+					msg = "에러가 발생하였습니다.";
+			}
+			request.setAttribute("user_id", user_id);
+			request.setAttribute("msg", msg);
+			doGet(request, response);
+			
+			System.out.println(result);
+			return;
+		}
 		
-		System.out.println("result : " + result);
+		HttpSession hs = request.getSession();
+		hs.setAttribute(Const.LOGIN_USER, param);
+		
+	
+		System.out.println("로그인 성공!");
+		response.sendRedirect("/board/list");
 		
 	}
 

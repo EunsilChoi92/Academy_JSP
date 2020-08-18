@@ -8,27 +8,66 @@
 <style>
 	#container {
 		width: 500px;
-		display: grid;
-		grid-template-row: repeat(5, 100px);
-		grid-template-column: repeat(5, 100px);
+		height: 500px;
+	
+	}
+	
+	h1 {
+		grid-area: title;
 	}
 	.err {
 		color: red;
+		grid-area: err;
 	}
+	#frm {
+		display: grid;
+		grid-template-rows: repeat(6, 1fr);
+		grid-template-columns: repeat(5, 1fr);
+		grid-template-areas:
+			". . id . ."
+			". . pw . ."
+			". . pwre . ."
+			". . nm . ."
+			". . email . ."
+			". . btn . .";	
+	}
+	#area1, #area2, #area3, #area4, #area5, #area6 {
+		width: 98%;
+	}
+	#area1 {
+		grid-area: id;
+	}
+	#area2 {
+		grid-area: pw;
+	}
+	#area3 {
+		grid-area: pwre;
+	}
+	#area4 {
+		grid-area: nm;
+	}
+	#area5 {
+		grid-area: email;
+	}
+	#area6 {
+		grid-area: btn;
+	}
+	
+	
 </style>
 </head>
 <body>
-	<h1>회원가입</h1>
 	<div id="container">
+	<h1>회원가입</h1>
 	<div class="err">${msg}</div>
 		<div>
 			<form action="/join" id="frm" method="post" onsubmit="return chk()">
-				<div><label><input type="text" name="user_id" placeholder="아이디" value="${data.user_id}" required></label></div>
-				<div><label><input type="password" name="user_pw" placeholder="비밀번호" required></label></div>
-				<div><label><input type="password" name="user_pwre" placeholder="비밀번호 확인" required></label></div>
-				<div><input type="text" name="nm" placeholder="이름" value="${data.nm}" required></div>
-				<div><input type="email" name="email" placeholder="이메일" value="${data.email}"></div>
-				<div><input type="submit" value="회원가입"></div>
+				<div id="area1"><input type="text" id="user_id" name="user_id" placeholder="아이디" value="${data.user_id}" required></div>
+				<div id="area2"><input type="password" id="user_pw" name="user_pw" placeholder="비밀번호" required></div>
+				<div id="area3"><input type="password" id="user_pwre" name="user_pwre" placeholder="비밀번호 확인" required></div>
+				<div id="area4"><input type="text" name="nm" id="user_nm" placeholder="이름" value="${data.nm}" required></div>
+				<div id="area5"><input type="email" id="email" name="email" placeholder="이메일" value="${data.email}"></div>
+				<div id="area6"><input type="submit" id="submit_btn" value="회원가입"></div>
 			</form>
 		</div>
 	</div>

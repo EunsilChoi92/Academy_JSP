@@ -23,7 +23,12 @@ public class MainServlet extends HttpServlet {
 	}
 	
 	
+	
 	private void proc(HttpServletRequest request, HttpServletResponse response, int method) throws ServletException, IOException {
 		System.out.println("url : " + request.getRequestURI() + ", method : " + method); // URI 값으로 분기시킴
 	}
+	
+	// 한 servlet으로 몰아주기
+	// 관리가 편함
 }
+

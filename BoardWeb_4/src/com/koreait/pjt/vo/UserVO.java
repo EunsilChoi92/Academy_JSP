@@ -55,7 +55,7 @@ public class UserVO {
 	
 	public String getR_dt() {
 		return r_dt;
-	}
+	} 
 	public void setR_dt(String r_dt) {
 		this.r_dt = r_dt;
 	}

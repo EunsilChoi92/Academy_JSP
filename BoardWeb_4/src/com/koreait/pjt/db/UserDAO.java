@@ -18,12 +18,11 @@ public class UserDAO {
 		
 		return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
 			@Override
-			public int update(PreparedStatement ps) throws SQLException {
+			public void update(PreparedStatement ps) throws SQLException {
 				ps.setNString(1, param.getUser_id());
 				ps.setNString(2, param.getUser_pw());
 				ps.setNString(3, param.getNm());
 				ps.setNString(4, param.getEmail());
-				return ps.executeUpdate();
 			}
 		});
 	}
@@ -36,10 +35,10 @@ public class UserDAO {
 				+ " WHERE user_id = ? ";
 		
 		return JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
-			@Override
-			public ResultSet prepared(PreparedStatement ps) throws SQLException {
+			@Override // ResultSet return 타입을 void로 변경했음
+			public void prepared(PreparedStatement ps) throws SQLException {
 				ps.setNString(1, param.getUser_id());
-				return ps.executeQuery();
+				// return ps.executeQuery();
 			}
 			
 			@Override

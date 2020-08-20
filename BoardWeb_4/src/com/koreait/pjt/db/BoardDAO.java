@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.koreait.pjt.vo.BoardDomain;
 import com.koreait.pjt.vo.BoardVO;
 
 public class BoardDAO {
@@ -12,7 +14,7 @@ public class BoardDAO {
 	public static List<BoardVO> selBoardList() {
 		final List<BoardVO> list = new ArrayList();
 		
-		String sql = " SELECT A.i_board, A.title, A.hits, B.nm, A.r_dt "
+		String sql = " SELECT A.i_board, A.title, A.hits, B.nm, to_char(A.r_dt, 'yyyy/mm/dd hh24:mi:ss') as r_dt "
 				+ " FROM t_board4 A "
 				+ " JOIN t_user B "
 				+ " ON A.i_user = B.i_user "
@@ -64,19 +66,42 @@ public class BoardDAO {
 		});
 	}
 	
-	// 디테일 아직 미완성
-	public static BoardVO selBoard(BoardVO param) {
+	// 디테일 i_num 뽑기
+	public static int selI_board(int i_user) {
+		String  sql = " SELECT MAX(i_board) FROM t_board4 WHERE i_user = ? ";
 		
-		String sql = " SELECT A.i_board, A.title, A.ctnt, A.hits, B.nm, A.r_dt "
+		return JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
+
+			@Override
+			public void prepared(PreparedStatement ps) throws SQLException {
+				ps.setInt(1, i_user);
+			}
+			@Override
+			public int executeQuery(ResultSet rs) throws SQLException {
+				int i_board = 0;
+				if(rs.next()) {
+					i_board = rs.getInt("MAX(i_board)");
+				}
+				return i_board;
+			}
+		});		
+	}
+	
+	// 디테일 
+	public static BoardVO selBoard(BoardVO param) {
+		BoardDomain result = new BoardDomain(); 
+		String sql = " SELECT A.i_board, A.i_user, A.title, A.ctnt, A.hits, B.nm, to_char(A.r_dt, 'yyyy/mm/dd hh24:mi:ss') as r_dt "
 				+ " FROM t_board4 A "
 				+ " JOIN t_user B "
 				+ " ON A.i_user = B.i_user "
-				+ " ORDER BY i_board DESC ";
+				+ " WHERE A.i_board = ? ";
 		
 		JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
 
 			@Override
-			public void prepared(PreparedStatement ps) throws SQLException {}
+			public void prepared(PreparedStatement ps) throws SQLException {
+				ps.setInt(1, param.getI_board());
+			}
 
 			@Override
 			public int executeQuery(ResultSet rs) throws SQLException {
@@ -87,20 +112,49 @@ public class BoardDAO {
 					int hits = rs.getInt("hits");
 					String nm = rs.getNString("nm");
 					String r_dt = rs.getNString("r_dt");
+					int i_user = rs.getInt("i_user");
 					
-					BoardVO vo = new BoardVO(); 
-					vo.setI_board(i_board);
-					vo.setTitle(title);
-					vo.setCtnt(ctnt);
-					vo.setHits(hits);
-					vo.setNm(nm);
-					vo.setR_dt(r_dt);
+					result.setI_board(i_board);
+					result.setTitle(title);
+					result.setCtnt(ctnt);
+					result.setHits(hits);
+					result.setNm(nm);
+					result.setR_dt(r_dt);
+					result.setI_user(i_user);
 				}
 				return 1;
 			}
 		});
+		return result;
+	}
+	
+	public static int delBoard(BoardVO param) {
+		String sql = " DELETE t_board4 WHERE i_board = ? AND i_user = ? ";
 		
-		return ;
+		return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
+
+			@Override
+			public void update(PreparedStatement ps) throws SQLException {
+				ps.setInt(1, param.getI_board());
+				ps.setInt(2, param.getI_user());
+			}
+		});
+	}
+	
+	public static int updBoard(BoardVO param) {
+		String sql = " UPDATE t_board4 SET title = ?, ctnt = ? WHERE i_board = ? AND i_user = ? ";
+		
+		return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
+
+			@Override
+			public void update(PreparedStatement ps) throws SQLException {
+				ps.setNString(1, param.getTitle());
+				ps.setNString(2, param.getCtnt());
+				ps.setInt(3, param.getI_board());
+				ps.setInt(4, param.getI_user());
+			}
+		});
+		
 	}
 	
 }

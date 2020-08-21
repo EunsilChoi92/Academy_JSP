@@ -61,4 +61,11 @@ public class MyUtils {
 
       return sha;
 	}
+	
+	public static void logout(HttpServletRequest request) throws IOException {
+		if(!isLogout(request)) {
+			request.getSession().invalidate();
+		}
+
+	}
 }

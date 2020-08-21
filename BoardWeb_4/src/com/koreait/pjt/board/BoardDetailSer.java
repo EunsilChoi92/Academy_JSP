@@ -1,6 +1,8 @@
 package com.koreait.pjt.board;
 
 import java.io.IOException;
+
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +15,7 @@ import com.koreait.pjt.MyUtils;
 import com.koreait.pjt.ViewResolver;
 import com.koreait.pjt.db.BoardDAO;
 import com.koreait.pjt.vo.BoardVO;
+import com.koreait.pjt.vo.UserVO;
 
 
 @WebServlet("/board/detail")
@@ -20,21 +23,33 @@ public class BoardDetailSer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		// i_board 뽑기
-//		int i_board = BoardDAO.selI_board(i_user);
-//		System.out.println("detail i_board : " + i_board);
+		
+		
 		
 		// 글 눌렀을 때 디테일 보이기
 		String strI_board = request.getParameter("i_board");
 		int i_board = Integer.parseInt(strI_board);
 		System.out.println("i_board : " + i_board);
 		
+		
 		BoardVO param = new BoardVO();
 		param.setI_board(i_board);
 		
-		BoardVO data = BoardDAO.selBoard(param);
 		
+		
+				
+		
+		// 조회수 올리기
+		
+		ServletContext application = getServletContext();
+		Integer readI_user = (Integer)application.getAttribute("read_" + strI_board);
+		UserVO loginUser = MyUtils.getLoginUser(request);
+		if(readI_user == null || loginUser.getI_user() != readI_user) {
+			BoardDAO.addHits1(i_board);
+			application.setAttribute("read_" + strI_board, loginUser.getI_user());
+		}
+				
+		BoardVO data = BoardDAO.selBoard(param);
 		request.setAttribute("data", data);
 		
 		ViewResolver.forwardLoginChk("board/detail", request, response);

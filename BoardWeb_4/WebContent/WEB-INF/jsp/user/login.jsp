@@ -6,22 +6,66 @@
 <meta charset="UTF-8">
 <title>로그인</title>
 	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&display=swap');
+		* {
+			margin: 0;
+			padding: 0;
+			font-family: 'Noto Serif KR', serif;
+			font-size: 20px;
+		}
+		html, body {
+			width: 100%;
+		}
+		#container {
+			width: 100%;
+			padding-top: 50px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}	
+		h1 {
+			text-align: center;
+			font-size: 45px;
+		}
 		.err {
+			text-align: center;
 			color: red;
+		}
+		.formBtn {
+			margin: 20px;
+		}
+		input, button {
+			margin-top: 5px;
+			width: 400px;
+			height: 40px;
+			padding-left: 10px;
+			box-sizing: border-box;
+		}
+		input[type="submit"] {
+			margin-top: 15px;
+		}
+		button, input[type="submit"] {
+			border: 1px solid darkgray;			
 		}
 	</style>
 </head>
 <body>
-	<h1>로그인</h1>
-	<div>
-	<div class="err">${msg}</div>
-		<form action="/login" method="post" id="frm" onsubmit="return chk()">
-			<div><input type="text" name="user_id" placeholder="아이디" value="${user_id}" required></div>
-			<div><input type="password" name="user_pw" placeholder="비밀번호" required></div>
-			<div><input type="submit" value="로그인"></div>
-		</form>
+	<div id="container">
+		<div>
+			<h1>로그인</h1>
+			<div>
+			<div class="err">${msg}</div>
+			<div class="formBtn">
+				<form action="/login" method="post" id="frm" onsubmit="return chk()">
+					<div><input type="text" name="user_id" placeholder="아이디" value="${user_id}" required></div>
+					<div><input type="password" name="user_pw" placeholder="비밀번호" required></div>
+					<div><input type="submit" value="로그인"></div>
+				</form>
+				<div class="btn"><a href="/join"><button>회원가입</button></a></div>
+			</div>
+			</div>
+		</div>
 	</div>
-	<a href="/join"><button>회원가입</button></a>
 	<script>
 		function chk() {
 			if(frm.user_id.value < 5) {
@@ -34,7 +78,6 @@
 				return false;
 			}
 		}
-	
 	</script>
 </body>
 </html>

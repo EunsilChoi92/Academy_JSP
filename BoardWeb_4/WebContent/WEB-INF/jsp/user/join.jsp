@@ -6,14 +6,13 @@
 <meta charset="UTF-8">
 <title>회원가입</title>
 <style>
-	#container {
+
+	/*#container {
 		width: 500px;
 		height: 500px;
-	
 	}
-	
 	h1 {
-		grid-area: title;
+		text-align: center;		
 	}
 	.err {
 		color: red;
@@ -51,24 +50,70 @@
 	}
 	#area6 {
 		grid-area: btn;
+	}*/
+	@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&display=swap');
+	* {
+		margin: 0;
+		padding: 0;
+		font-family: 'Noto Serif KR', serif;
+		font-size: 20px;
 	}
-	
+	html, body {
+		width: 100%;
+	}
+	#container {
+		width: 100%;
+		padding-top: 50px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	h1 {
+		text-align: center;
+		font-size: 45px;
+	}
+	.err {
+		text-align: center;
+		color: red;
+	}
+	#frm {
+		margin: 20px;
+		
+	}
+	input {
+		margin-top: 5px;
+		width: 400px;
+		height: 40px;
+		padding-left: 10px;
+		box-sizing: border-box;
+	}
+	#area6 {
+		padding: 0;
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+    }
+   	button, input[type="submit"] {
+		border: 1px solid darkgray;			
+	}
 	
 </style>
 </head>
 <body>
 	<div id="container">
-	<h1>회원가입</h1>
-	<div class="err">${msg}</div>
 		<div>
-			<form action="/join" id="frm" method="post" onsubmit="return chk()">
-				<div id="area1"><input type="text" id="user_id" name="user_id" placeholder="아이디" value="${data.user_id}" required></div>
-				<div id="area2"><input type="password" id="user_pw" name="user_pw" placeholder="비밀번호" required></div>
-				<div id="area3"><input type="password" id="user_pwre" name="user_pwre" placeholder="비밀번호 확인" required></div>
-				<div id="area4"><input type="text" name="nm" id="user_nm" placeholder="이름" value="${data.nm}" required></div>
-				<div id="area5"><input type="email" id="email" name="email" placeholder="이메일" value="${data.email}"></div>
-				<div id="area6"><input type="submit" id="submit_btn" value="회원가입"></div>
-			</form>
+		<h1>회원가입</h1>
+		<div class="err">${msg}</div>
+			<div>
+				<form action="/join" id="frm" method="post" onsubmit="return chk()">
+					<div id="area1"><input type="text" id="user_id" name="user_id" placeholder="아이디" value="${data.user_id}" required></div>
+					<div id="area2"><input type="password" id="user_pw" name="user_pw" placeholder="비밀번호" required></div>
+					<div id="area3"><input type="password" id="user_pwre" name="user_pwre" placeholder="비밀번호 확인" required></div>
+					<div id="area4"><input type="text" name="nm" id="user_nm" placeholder="이름" value="${data.nm}" required></div>
+					<div id="area5"><input type="email" id="email" name="email" placeholder="이메일" value="${data.email}"></div>
+					<div id="area6"><input type="submit" id="submit_btn" value="회원가입"></div>
+				</form>
+			</div>
 		</div>
 	</div>
 	<script>

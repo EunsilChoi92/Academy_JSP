@@ -90,7 +90,7 @@ public class BoardDAO {
 	// 디테일 
 	public static BoardVO selBoard(BoardVO param) {
 		BoardDomain result = new BoardDomain(); 
-		String sql = " SELECT A.i_board, A.i_user, A.title, A.ctnt, A.hits, B.nm, to_char(A.r_dt, 'yyyy/mm/dd hh24:mi:ss') as r_dt "
+		String sql = " SELECT A.i_board, A.i_user, A.title, A.ctnt, A.hits, B.nm, to_char(A.r_dt, 'yyyy/mm/dd hh24:mi:ss') as r_dt, A.m_dt "
 				+ " FROM t_board4 A "
 				+ " JOIN t_user B "
 				+ " ON A.i_user = B.i_user "
@@ -112,6 +112,7 @@ public class BoardDAO {
 					int hits = rs.getInt("hits");
 					String nm = rs.getNString("nm");
 					String r_dt = rs.getNString("r_dt");
+					String m_dt = rs.getNString("m_dt");
 					int i_user = rs.getInt("i_user");
 					
 					result.setI_board(i_board);
@@ -120,6 +121,7 @@ public class BoardDAO {
 					result.setHits(hits);
 					result.setNm(nm);
 					result.setR_dt(r_dt);
+					result.setM_dt(m_dt);
 					result.setI_user(i_user);
 				}
 				return 1;
@@ -142,7 +144,7 @@ public class BoardDAO {
 	}
 	
 	public static int updBoard(BoardVO param) {
-		String sql = " UPDATE t_board4 SET title = ?, ctnt = ? WHERE i_board = ? AND i_user = ? ";
+		String sql = " UPDATE t_board4 SET title = ?, ctnt = ?, m_dt = sysdate WHERE i_board = ? AND i_user = ? ";
 		
 		return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
 
@@ -154,7 +156,33 @@ public class BoardDAO {
 				ps.setInt(4, param.getI_user());
 			}
 		});
-		
 	}
+	
+	public static int addHits(BoardVO param) {
+		String sql = " UPDATE t_board4 SET hits = ? WHERE i_board = ? ";
+		
+		return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
+
+			@Override
+			public void update(PreparedStatement ps) throws SQLException {
+				int newHits = param.getHits() + 1;
+				ps.setInt(1, newHits);
+				ps.setInt(2, param.getI_board());
+				param.setHits(newHits);
+			}
+		});
+	}
+	
+   public static void addHits1(final int i_board) {
+	      String sql = " UPDATE t_board4 "
+	            + " SET hits = hits + 1 "
+	            + " WHERE i_board = ? ";
+	      JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
+	         @Override
+	         public void update(PreparedStatement ps) throws SQLException {
+	            ps.setInt(1, i_board);
+	         }
+	      });
+	   }
 	
 }

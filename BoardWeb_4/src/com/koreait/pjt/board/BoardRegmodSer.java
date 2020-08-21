@@ -63,7 +63,7 @@ public class BoardRegmodSer extends HttpServlet {
 		String strI_board = request.getParameter("i_board");
 		int result;
 		int i_board;
-		if(strI_board == "") {
+		if("".equals(strI_board)) {
 			result = BoardDAO.insBoard(param);	
 			i_board = BoardDAO.selI_board(i_user);
 		} else {

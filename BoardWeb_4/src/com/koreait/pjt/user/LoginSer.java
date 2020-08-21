@@ -21,6 +21,10 @@ public class LoginSer extends HttpServlet {
        
   
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(MyUtils.getLoginUser(request) != null) {
+			response.sendRedirect("/board/list");
+			return;
+		}
 		ViewResolver.forward("user/login", request, response);
 	}
 

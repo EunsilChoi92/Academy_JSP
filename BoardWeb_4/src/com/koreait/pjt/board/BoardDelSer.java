@@ -46,8 +46,7 @@ public class BoardDelSer extends HttpServlet {
 		}
 		
 		response.sendRedirect("/board/list");
-		
-		
+
 	}
 
 }

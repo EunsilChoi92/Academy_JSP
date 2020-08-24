@@ -41,7 +41,7 @@ public class JdbcTemplate {
 			
 			// 수정
 			jdbc.prepared(ps);
-			rs = ps.executeQuery(); //
+			rs = ps.executeQuery();
 			
 			result = jdbc.executeQuery(rs);
 		} catch (Exception e) {

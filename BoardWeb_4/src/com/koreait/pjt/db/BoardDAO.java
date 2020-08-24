@@ -89,18 +89,22 @@ public class BoardDAO {
 	
 	// 디테일 
 	public static BoardVO selBoard(BoardVO param) {
-		BoardDomain result = new BoardDomain(); 
-		String sql = " SELECT A.i_board, A.i_user, A.title, A.ctnt, A.hits, B.nm, to_char(A.r_dt, 'yyyy/mm/dd hh24:mi:ss') as r_dt, A.m_dt "
+		BoardDomain result = new BoardDomain(); 	
+		String sql = " SELECT A.i_board, A.title, A.ctnt, A.hits, A.i_user, A.r_dt, A.m_dt, B.nm, DECODE(C.i_user, null, 0, 1) as yn_like "
 				+ " FROM t_board4 A "
-				+ " JOIN t_user B "
+				+ " INNER JOIN t_user B "
 				+ " ON A.i_user = B.i_user "
+				+ " LEFT JOIN t_board4_like C "
+				+ " ON A.i_board = C.i_board "
+				+ " AND C.i_user = ? "
 				+ " WHERE A.i_board = ? ";
 		
 		JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
 
 			@Override
 			public void prepared(PreparedStatement ps) throws SQLException {
-				ps.setInt(1, param.getI_board());
+				ps.setInt(1, param.getI_user());
+				ps.setInt(2, param.getI_board());
 			}
 
 			@Override
@@ -114,6 +118,7 @@ public class BoardDAO {
 					String r_dt = rs.getNString("r_dt");
 					String m_dt = rs.getNString("m_dt");
 					int i_user = rs.getInt("i_user");
+					int yn_like = rs.getInt("yn_like");
 					
 					result.setI_board(i_board);
 					result.setTitle(title);
@@ -123,6 +128,7 @@ public class BoardDAO {
 					result.setR_dt(r_dt);
 					result.setM_dt(m_dt);
 					result.setI_user(i_user);
+					result.setYn_like(yn_like);
 				}
 				return 1;
 			}
@@ -184,5 +190,7 @@ public class BoardDAO {
 	         }
 	      });
 	   }
+   
+   
 	
 }

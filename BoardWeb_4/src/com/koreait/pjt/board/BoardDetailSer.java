@@ -1,6 +1,7 @@
 package com.koreait.pjt.board;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -14,7 +15,9 @@ import com.koreait.pjt.Const;
 import com.koreait.pjt.MyUtils;
 import com.koreait.pjt.ViewResolver;
 import com.koreait.pjt.db.BoardDAO;
+import com.koreait.pjt.db.CommentDAO;
 import com.koreait.pjt.vo.BoardVO;
+import com.koreait.pjt.vo.CommentVO;
 import com.koreait.pjt.vo.UserVO;
 
 
@@ -48,9 +51,20 @@ public class BoardDetailSer extends HttpServlet {
 			BoardDAO.addHits1(i_board);
 			application.setAttribute("read_" + strI_board, loginUser.getI_user());
 		}
+		
+		// 좋아요 - 로그인한 유저의 i_user 정보 넣기
+		param.setI_user(loginUser.getI_user());
+		// 좋아요 여기까지
 				
 		BoardVO data = BoardDAO.selBoard(param);
 		request.setAttribute("data", data);
+		
+		
+		// comment
+		List<CommentVO> commentList = CommentDAO.selCommentList();
+		request.setAttribute("commentList", commentList);	
+		
+				
 		
 		ViewResolver.forwardLoginChk("board/detail", request, response);
 		

@@ -12,6 +12,7 @@ import com.koreait.pjt.Const;
 import com.koreait.pjt.MyUtils;
 import com.koreait.pjt.ViewResolver;
 import com.koreait.pjt.db.UserDAO;
+import com.koreait.pjt.vo.UserLoginHistoryVO;
 import com.koreait.pjt.vo.UserVO;
 
 
@@ -61,6 +62,24 @@ public class LoginSer extends HttpServlet {
 			return;
 		}
 		
+		// 로그인 히스토리 기록 [start]
+		String agent = request.getHeader("User-Agent");
+		System.out.println("agent : " + agent);
+		
+		String os = getOs(agent);
+		String browser = getBrowser(agent);
+		String ip_addr = request.getRemoteAddr();
+			
+		UserLoginHistoryVO ulhVO = new UserLoginHistoryVO();
+		ulhVO.setI_user(param.getI_user());
+		ulhVO.setOs(os);
+		ulhVO.setIp_addr(ip_addr);
+		ulhVO.setBrowser(browser);
+		UserDAO.insUserLoginHistory(ulhVO);
+		
+		// 로그인 히스토리 기록 [end]
+		
+		
 		HttpSession hs = request.getSession();
 		hs.setAttribute(Const.LOGIN_USER, param);
 		
@@ -68,6 +87,33 @@ public class LoginSer extends HttpServlet {
 		System.out.println("로그인 성공!");
 		response.sendRedirect("/board/list");
 		
+	}
+	
+	private String getBrowser(String agent) {
+		if(agent.toLowerCase().contains("msie")) {
+			return "ie";
+		} else if(agent.toLowerCase().contains("safari")) {
+			return "safari";
+		} else if(agent.toLowerCase().contains("chrome")) {
+			return "chrome";
+		}
+		return "";
+	}
+	
+	private String getOs(String agent) {
+		String result = null;
+		if(agent.toLowerCase().contains("mac")) {
+			return "mac";
+		} else if(agent.toLowerCase().contains("windows")) {
+			return "win";
+		} else if(agent.toLowerCase().contains("x11")) {
+			return "linux";
+		} else if(agent.toLowerCase().contains("android")) {
+			return "android";
+		} else if(agent.toLowerCase().contains("iphone")) {
+			return "iOS";
+		}
+		return "";
 	}
 
 }

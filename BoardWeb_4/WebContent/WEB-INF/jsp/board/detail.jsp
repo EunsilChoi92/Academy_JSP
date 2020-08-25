@@ -9,6 +9,7 @@
 <head>
 <meta charset="UTF-8">
 <title>내용</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&display=swap');
         * {
@@ -77,7 +78,6 @@
         	grid-area: list;
         	justify-self: center;
         }
-        
         .mod {
         	grid-area: mod;
         	justify-self: center;
@@ -89,7 +89,7 @@
         	display: flex;
         	justify-content: center;
         }
-		button, input[type="submit"] {
+		button, input[type="submit"], input[type="button"] {
 			border: 1px solid darkgray;	
 			width: 100px;
 			height: 30px;		
@@ -130,10 +130,15 @@
             display: flex;
             justify-content: flex-end;
         }
-        .btns a {
+        .commentModDelBtn a, .commentModDelBtn span {
             color: darkgray;
             text-decoration-line: none;
+            cursor: pointer;
             margin-right: 15px;
+            
+        }
+        .btns .commentModDelBtn span {
+        	
         }
         /* 댓글 입력 부분 */
         form {
@@ -148,15 +153,26 @@
             padding: 5px;
             box-sizing: border-box;
         }
-        /* 대댓글~~ */
-        .btns span {
-            color: darkgray;
-            margin-right: 15px;
-            cursor: pointer;
+        /* 댓글 수정 버튼 누르면 나오는 textarea, 버튼들 */
+        .modCommentTextarea {
+            width: 82%;
+            margin: 10px 0;
+        }
+        .commentSubmitCancle {
+            width: 15%;
+        }
+        .commentSubmitCancle input {
+            margin: 2px 0;
         }
         .addCommentTextarea {
             width: 82%;
             margin: 10px 0;
+        }
+        /* 대댓글~~ */
+        .btns .addChildCommentBtn {
+            color: darkgray;
+            margin-right: 15px;
+            cursor: pointer;
         }
         /* 대댓글 구조 짜기 ㅜㅜ */
         .childComment:not(.firstChildComment) {
@@ -173,6 +189,12 @@
             color: rgb(122, 122, 122);
             padding-right: 5px;
         }
+        
+        /* 좋아요 하트 */
+        .material-icons {
+        	color: red;
+        	cursor: pointer;
+        }
 		
 
 </style>
@@ -187,12 +209,15 @@
 	                <td>${data.nm }</td>
 	                <td rowspan="2">조회수 ${data.hits }</td>
 	                <td rowspan="2">
-	                	<c:if test="${data.yn_like eq 1 }">
-	                	❤
+	                	<span class="material-icons" onclick="toggleLike(${data.yn_like})">
+	                	<c:if test="${data.yn_like == 1 }">
+	                	favorite
 	                	</c:if>
-	                	<c:if test="${data.yn_like eq 0 }">
-	                	ㄴㄴ
+	                	<c:if test="${data.yn_like == 0 }">
+	                	favorite_border
 	                	</c:if>
+	                	</span>
+	                	<span>${like_count }</span>
 	                </td>
 	            </tr>
 	            <tr>
@@ -236,11 +261,14 @@
 								<td>${item.nm }</td>
 								<td id="td${item.i_comment}" colspan="2">
 									<div>
-									${item.commentCtnt}
+									<span>${item.commentCtnt}</span>
 										<span class="sysdate">${item.r_dt }</span>
 									</div>
 									<div class="btns">
-			                            <span onclick="CommentInput('td${item.i_comment}')">댓글</span><span><a href="#">수정</a><a href="">삭제</a></span>
+			                            <span class="addChildCommentBtn" onclick="CommentInput('td${item.i_comment}')">댓글</span>
+			                            <c:if test="${LoginUser.i_user == item.i_user}">
+			                            	<span class="commentModDelBtn"><span onclick="clickCommentMod('td${item.i_comment}')">수정</span><a href="">삭제</a></span>
+			                            </c:if> 
 			                        </div>
 		                        </td>
 		                    </tr>
@@ -267,6 +295,13 @@
 			}
 			return false;
 		}
+        // 좋아요 누르기 function
+        function toggleLike(yn_like) {
+        	location.href="/board/toggleLike?i_board=${data.i_board}&yn_like=" + yn_like;
+        }
+        
+        
+        
 		// 댓글 버튼 누르면 해당 td 안에 form태그 추가
         function showCommentInput(id) {
             var parentTr = document.getElementById(id);
@@ -326,6 +361,52 @@
             }
             return true;
 		}
+        
+        
+     	// 댓글 수정 버튼 눌렀을 때
+        function clickCommentMod(id) {
+            var commentTd = document.getElementById(id);
+            var commentText = commentTd.childNodes[1].childNodes[1].innerText;
+            // 해당 td에 있는 노드 삭제
+            commentTd.childNodes[1].remove();
+            commentTd.childNodes[2].remove();
+
+            // textarea, 등록, 취소 버튼 생성
+            var formTag = document.createElement('form');
+            formTag.setAttribute("id", "modCommentForm")
+            formTag.setAttribute('action', ' ');
+            formTag.setAttribute('onsubmit', 'return eleValid(modCommentForm.modComment)')
+            var textareaTag = document.createElement('textarea');
+            textareaTag.setAttribute('class', 'modCommentTextarea');
+            textareaTag.innerHTML = commentText;
+            textareaTag.setAttribute('name', 'modComment');
+
+            var btnsDiv = document.createElement('div');
+            btnsDiv.setAttribute('class', 'commentSubmitCancle');
+
+            var submitbtn = document.createElement('input');
+            submitbtn.setAttribute('type', 'submit');
+            submitbtn.setAttribute('value', '등록')
+            var canclebtn = document.createElement('input');
+            canclebtn.setAttribute('type', 'button');
+            canclebtn.setAttribute('value', '취소');
+            canclebtn.setAttribute('onclick', '');
+
+            btnsDiv.appendChild(submitbtn);
+            btnsDiv.appendChild(canclebtn);
+
+            formTag.appendChild(textareaTag);
+            formTag.appendChild(btnsDiv);
+
+            commentTd.appendChild(formTag);
+        }
+
+        // 수정 취소 버튼 눌렀을 때
+        // fuctionn commentModCancle(id) {
+
+        // }
+        
+        
 	</script>
 </body>
 </html>

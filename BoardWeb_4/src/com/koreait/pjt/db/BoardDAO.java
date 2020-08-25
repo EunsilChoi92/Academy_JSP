@@ -88,9 +88,12 @@ public class BoardDAO {
 	}
 	
 	// 디테일 
-	public static BoardVO selBoard(BoardVO param) {
+	public static BoardDomain selBoard(BoardVO param) {
 		BoardDomain result = new BoardDomain(); 	
-		String sql = " SELECT A.i_board, A.title, A.ctnt, A.hits, A.i_user, A.r_dt, A.m_dt, B.nm, DECODE(C.i_user, null, 0, 1) as yn_like "
+		result.setI_board(param.getI_board());
+		
+		String sql = " SELECT A.title, A.ctnt, A.hits, A.i_user, "
+				+ " A.r_dt, A.m_dt, B.nm, DECODE(C.i_user, null, 0, 1) as yn_like "
 				+ " FROM t_board4 A "
 				+ " INNER JOIN t_user B "
 				+ " ON A.i_user = B.i_user "
@@ -99,7 +102,7 @@ public class BoardDAO {
 				+ " AND C.i_user = ? "
 				+ " WHERE A.i_board = ? ";
 		
-		JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
+		int resultInt = JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
 
 			@Override
 			public void prepared(PreparedStatement ps) throws SQLException {
@@ -110,7 +113,6 @@ public class BoardDAO {
 			@Override
 			public int executeQuery(ResultSet rs) throws SQLException {
 				if(rs.next()) {
-					int i_board = rs.getInt("i_board");
 					String title = rs.getNString("title");
 					String ctnt = rs.getNString("ctnt");
 					int hits = rs.getInt("hits");
@@ -120,7 +122,10 @@ public class BoardDAO {
 					int i_user = rs.getInt("i_user");
 					int yn_like = rs.getInt("yn_like");
 					
-					result.setI_board(i_board);
+					System.out.println("title : " + title);
+					System.out.println("i_user : " + i_user);
+					System.out.println("yn_like : " + yn_like);
+					
 					result.setTitle(title);
 					result.setCtnt(ctnt);
 					result.setHits(hits);

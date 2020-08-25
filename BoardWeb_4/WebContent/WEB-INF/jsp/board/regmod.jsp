@@ -24,6 +24,9 @@
         flex-direction: column;
         align-items: center;
     }
+	.msg {
+		color: red;
+	}
     .content {
         width: 800px;
     }
@@ -49,9 +52,16 @@
         resize: none;
         height: 500px;
     }
-	.msg {
-		color: red;
-	}
+    .btns {
+    	display: flex;
+    	justify-content: center;
+    }
+    .btns input {
+    	margin: 0 10px;
+    	border: 1px solid darkgray;	
+		width: 100px;
+		height: 30px;	
+    }
 </style>
 </head>
 <body>
@@ -64,10 +74,22 @@
 				<div class="title">제목<input type="text" name="title" value="${data.title }"></div>
 				<div class="ctnt">내용<textarea name="ctnt">${data.ctnt }</textarea></div>
 				<div class="writer">글쓴이<input type="text" name="nm" value="${LoginUser.nm}" readonly></div>
-				<div class="btn"><input type="submit" value="${data == null ? '글 등록':'글 수정' }"></div>
+				<div class="btns">
+				<input type="submit" value="${data == null ? '글 등록':'글 수정' }">
+				<input type="button" value="취소" onclick="cancleBtn(${data == null ? null : data.i_board})">
+				</div>
 			</form>
 			</div>
 		</div>
 	</div>
+	<script>
+		function cancleBtn(i_board) {
+			if(i_board) {
+				location.href = '/board/detail?i_board=' + i_board;
+			} else {
+				location.href = '/board/list';
+			}
+		}
+	</script>
 </body>
 </html>

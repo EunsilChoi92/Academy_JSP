@@ -15,7 +15,9 @@ import com.koreait.pjt.Const;
 import com.koreait.pjt.MyUtils;
 import com.koreait.pjt.ViewResolver;
 import com.koreait.pjt.db.BoardDAO;
+import com.koreait.pjt.db.BoardLikeDAO;
 import com.koreait.pjt.db.CommentDAO;
+import com.koreait.pjt.vo.BoardDomain;
 import com.koreait.pjt.vo.BoardVO;
 import com.koreait.pjt.vo.CommentVO;
 import com.koreait.pjt.vo.UserVO;
@@ -56,9 +58,14 @@ public class BoardDetailSer extends HttpServlet {
 		param.setI_user(loginUser.getI_user());
 		// 좋아요 여기까지
 				
-		BoardVO data = BoardDAO.selBoard(param);
+		
+		BoardDomain data = BoardDAO.selBoard(param);
+		System.out.println(data.getYn_like());
 		request.setAttribute("data", data);
 		
+		// 좋아요 숫자 표시
+		int like_count = BoardLikeDAO.selBoardLikeCnt(param);
+		request.setAttribute("like_count", like_count);
 		
 		// comment
 		List<CommentVO> commentList = CommentDAO.selCommentList();

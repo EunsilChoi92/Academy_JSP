@@ -23,10 +23,18 @@ public class BoardRegmodSer extends HttpServlet {
 
 	// 화면 띄우기(등록/수정창)
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
 		String strI_board = request.getParameter("i_board");
 		
 		if(strI_board != null) {
 			int i_board = MyUtils.parseStrToInt(strI_board);
+			
+			if(i_board == 0) {
+				String msg = "에러가 발생했습니다.";
+				request.setAttribute("msg", msg);
+				ViewResolver.forwardLoginChk("board/regmod", request, response);
+				return;
+			}
 			
 			BoardVO param = new BoardVO();
 			param.setI_board(i_board);
@@ -43,15 +51,15 @@ public class BoardRegmodSer extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String title = request.getParameter("title");
 		String ctnt = request.getParameter("ctnt");
-		
+			
 		HttpSession hs = request.getSession();
 		UserVO sessionParam = (UserVO) hs.getAttribute(Const.LOGIN_USER);
 		int i_user = sessionParam.getI_user();		
 		
 		// 확인용
-		System.out.println(title);
-		System.out.println(ctnt);
-		System.out.println(i_user);
+		System.out.println("title : " + title);
+		System.out.println("cntnt : " + ctnt);
+		System.out.println("i_user : " + i_user);
 		
 		BoardVO param = new BoardVO();
 		
@@ -61,6 +69,7 @@ public class BoardRegmodSer extends HttpServlet {
 		
 		
 		String strI_board = request.getParameter("i_board");
+		System.out.println("i_board : " + strI_board);
 		int result;
 		int i_board;
 		if("".equals(strI_board)) {
@@ -83,8 +92,6 @@ public class BoardRegmodSer extends HttpServlet {
 		
 		System.out.println("result : " + result);
 		if(result != 1) {
-			String msg = "에러가 발생했습니다.";
-			request.setAttribute("msg", msg);
 			doGet(request, response);
 			return;
 		}

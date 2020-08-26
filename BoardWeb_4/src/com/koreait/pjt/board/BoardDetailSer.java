@@ -29,8 +29,6 @@ public class BoardDetailSer extends HttpServlet {
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		
-		
 		// 글 눌렀을 때 디테일 보이기
 		String strI_board = request.getParameter("i_board");
 		int i_board = Integer.parseInt(strI_board);
@@ -41,8 +39,6 @@ public class BoardDetailSer extends HttpServlet {
 		param.setI_board(i_board);
 		
 		
-		
-				
 		
 		// 조회수 올리기
 		

@@ -21,13 +21,18 @@
 <fullyQualifiedTypeName name="com.koreait.pjt.db.DbCon"/>
 <fullyQualifiedTypeName name="java.sql.ResultSet"/>
 <fullyQualifiedTypeName name="com.koreait.pjt.Const"/>
-<fullyQualifiedTypeName name="java.util.List"/>
-<fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="javax.servlet.http.HttpSession"/>
-<fullyQualifiedTypeName name="com.koreait.pjt.vo.BoardDomain"/>
 <fullyQualifiedTypeName name="com.koreait.pjt.db.BoardDAO"/>
-<fullyQualifiedTypeName name="com.koreait.pjt.vo.BoardVO"/>
 <fullyQualifiedTypeName name="com.koreait.pjt.vo.UserVO"/>
-<fullyQualifiedTypeName name="com.koreait.pjt.MyUtils"/>
 <fullyQualifiedTypeName name="javax.servlet.ServletContext"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="com.koreait.pjt.vo.UserLoginHistoryVO"/>
+<fullyQualifiedTypeName name="com.koreait.pjt.vo.CommentVO"/>
+<fullyQualifiedTypeName name="com.koreait.pjt.db.CommentDAO"/>
+<fullyQualifiedTypeName name="com.koreait.pjt.vo.BoardLikeVO"/>
+<fullyQualifiedTypeName name="com.koreait.pjt.vo.BoardDomain"/>
+<fullyQualifiedTypeName name="com.koreait.pjt.MyUtils"/>
+<fullyQualifiedTypeName name="com.koreait.pjt.vo.BoardVO"/>
+<fullyQualifiedTypeName name="com.koreait.pjt.db.BoardLikeDAO"/>
 </qualifiedTypeNameHistroy>

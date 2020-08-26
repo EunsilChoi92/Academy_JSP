@@ -190,6 +190,11 @@
             padding-right: 5px;
         }
         
+        /* 댓글 없을 때*/
+        .parentCommentEmpty {
+        	text-align: center;
+        }
+        
         /* 좋아요 하트 */
         .material-icons {
         	color: red;
@@ -246,40 +251,45 @@
 		</div>
 		<!-- 여기부터 댓글부분 -->
 		    <div class="comment">
-	            <table id="table"> <!-- id table 왜 준거지?? -.-? -->
-					<!-- 실제 글 i_board와 commentList의 i_board가 같다면 출력 -->
-					<!-- 
-					<c:if test="${data.i_board ne item.i_board}">
-						<tr class="parentComment">
-							<td colspan="3">등록된 댓글이 없습니다.</td>
-						</tr>
-					</c:if>
-					 -->
+	            <table> 
+					<c:set var="isCommentEmpty" value="true"></c:set>
+					
+						
 					<c:forEach items="${commentList}" var="item">
 						<c:if test="${data.i_board eq item.i_board}">
+							
+							<!-- 해당 i_board에 코멘트 있는지 없는지 검사 후 댓글 없습니다 글 출력할지 여부 결정 -->
+							<c:set var="isCommentEmpty" value="false"></c:set>
+							
 							<tr class="parentComment">
 								<td>${item.nm }</td>
 								<td id="td${item.i_comment}" colspan="2">
 									<div>
 									<span>${item.commentCtnt}</span>
-										<span class="sysdate">${item.r_dt }</span>
+										<span class="sysdate">${item.r_dt == item.m_dt ? item.r_dt : item.m_dt}</span>
 									</div>
 									<div class="btns">
 			                            <span class="addChildCommentBtn" onclick="CommentInput('td${item.i_comment}')">댓글</span>
 			                            <c:if test="${LoginUser.i_user == item.i_user}">
-			                            	<span class="commentModDelBtn"><span onclick="clickCommentMod('td${item.i_comment}')">수정</span><a href="">삭제</a></span>
+			                            	<span class="commentModDelBtn"><span onclick="clickCommentMod('td${item.i_comment}', ${item.i_board}, ${item.i_comment})">수정</span>
+			                            	<a href="/comment/regmoddel?i_board=${item.i_board}&i_comment=${item.i_comment}" onclick="return submitDel()">삭제</a></span>
 			                            </c:if> 
 			                        </div>
 		                        </td>
 		                    </tr>
 						</c:if>
 					</c:forEach>
+					<c:if test="${isCommentEmpty eq true}">
+						<tr class="parentComment parentCommentEmpty">
+							<td colspan="4">등록된 댓글이 없습니다.</td>
+						</tr>
+					</c:if>
 	                <!-- 여기는 대댓부분 여기를 고쳐봅시당닫아다아다아다 -->
 
 	                <!-- 여기까지 대댓부분-->
 	            </table>
 	            <!-- 댓글 입력창, 그대로 놔두기! -->
-	            <form id="addCommentFrm" action="/comment/regmod" method="post" onsubmit="return eleValid(addCommentFrm.commentCtnt)">
+	            <form id="addCommentFrm" action="/comment/regmoddel" method="post" onsubmit="return eleValid(addCommentFrm.commentCtnt)">
 	                <input type="hidden" name="i_board" value="${data.i_board }">
 	                <textarea name="commentCtnt" placeholder="댓글을 입력하세요.(최대 300자)"></textarea>
 	                <input type="submit" value="등록">
@@ -289,12 +299,14 @@
 	</div>
 
 	<script>
+		// 삭제 전 컨펌 받기
 		function submitDel() {
 			if(confirm('삭제하시겠습니까?')) {
 				return true;
 			}
 			return false;
 		}
+		
         // 좋아요 누르기 function
         function toggleLike(yn_like) {
         	location.href="/board/toggleLike?i_board=${data.i_board}&yn_like=" + yn_like;
@@ -364,22 +376,36 @@
         
         
      	// 댓글 수정 버튼 눌렀을 때
-        function clickCommentMod(id) {
+        function clickCommentMod(id, i_board, i_comment) {
             var commentTd = document.getElementById(id);
             var commentText = commentTd.childNodes[1].childNodes[1].innerText;
             // 해당 td에 있는 노드 삭제
             commentTd.childNodes[1].remove();
             commentTd.childNodes[2].remove();
 
-            // textarea, 등록, 취소 버튼 생성
+            // form태그 생성
             var formTag = document.createElement('form');
             formTag.setAttribute("id", "modCommentForm")
-            formTag.setAttribute('action', ' ');
-            formTag.setAttribute('onsubmit', 'return eleValid(modCommentForm.modComment)')
+            formTag.setAttribute('action', '/comment/regmoddel');
+            formTag.setAttribute('onsubmit', 'return eleValid(modCommentForm.modComment)');
+            formTag.setAttribute('method', 'post');            
+            
+            // textarea, 등록, 취소 버튼 생성
             var textareaTag = document.createElement('textarea');
             textareaTag.setAttribute('class', 'modCommentTextarea');
             textareaTag.innerHTML = commentText;
-            textareaTag.setAttribute('name', 'modComment');
+            textareaTag.setAttribute('name', 'modCommentCtnt');
+            
+            	// update를 위해 hidden으로 i_board, i_comment 보내기
+            var inputHiddenI_board = document.createElement('input');
+            inputHiddenI_board.setAttribute('type', 'hidden');
+            inputHiddenI_board.setAttribute('name', 'modI_board');
+            inputHiddenI_board.setAttribute('value', i_board);
+            
+            var inputHiddenI_comment = document.createElement('input');
+            inputHiddenI_comment.setAttribute('type', 'hidden');
+            inputHiddenI_comment.setAttribute('name', 'modI_comment');
+            inputHiddenI_comment.setAttribute('value', i_comment);
 
             var btnsDiv = document.createElement('div');
             btnsDiv.setAttribute('class', 'commentSubmitCancle');
@@ -387,6 +413,7 @@
             var submitbtn = document.createElement('input');
             submitbtn.setAttribute('type', 'submit');
             submitbtn.setAttribute('value', '등록')
+            
             var canclebtn = document.createElement('input');
             canclebtn.setAttribute('type', 'button');
             canclebtn.setAttribute('value', '취소');
@@ -396,10 +423,13 @@
             btnsDiv.appendChild(canclebtn);
 
             formTag.appendChild(textareaTag);
+            formTag.appendChild(inputHiddenI_board);
+            formTag.appendChild(inputHiddenI_comment);
             formTag.appendChild(btnsDiv);
+            
 
             commentTd.appendChild(formTag);
-        }
+        };
 
         // 수정 취소 버튼 눌렀을 때
         // fuctionn commentModCancle(id) {

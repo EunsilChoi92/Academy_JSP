@@ -9,6 +9,7 @@ public class BoardVO {
 	private String r_dt;
 	private String m_dt;
 	private String nm;
+	private int page;
 	
 	
 	public int getI_board() {
@@ -66,6 +67,13 @@ public class BoardVO {
 	public void setNm(String nm) {
 		this.nm = nm;
 	}
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
+	}
+	
 	
 	
 	

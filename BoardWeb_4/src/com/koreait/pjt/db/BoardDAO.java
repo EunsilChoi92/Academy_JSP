@@ -11,19 +11,31 @@ import com.koreait.pjt.vo.BoardVO;
 
 public class BoardDAO {
 	
-	public static List<BoardVO> selBoardList() {
+	public static List<BoardVO> selBoardList(BoardDomain param) {
 		final List<BoardVO> list = new ArrayList();
 		
-		String sql = " SELECT A.i_board, A.title, A.hits, B.nm, to_char(A.r_dt, 'yyyy/mm/dd hh24:mi:ss') as r_dt "
-				+ " FROM t_board4 A "
-				+ " JOIN t_user B "
-				+ " ON A.i_user = B.i_user "
-				+ " ORDER BY i_board DESC ";
+		String sql = " select * from "  
+				+ " ( "
+				+ "    select rownum as rnum, A.* from " 
+				+ "		( "
+				+ "			SELECT A.i_board, A.title, A.hits, B.nm, to_char(A.r_dt, 'yyyy/mm/dd hh24:mi:ss') as r_dt "
+				+ " 		FROM t_board4 A "
+				+ " 		JOIN t_user B "
+				+ " 		ON A.i_user = B.i_user "
+				+ " 		ORDER BY i_board DESC "
+				+ "     ) A "
+				+ "    where rownum <= ? " 
+				+ " ) A " 
+				+ " where A.rnum >= ? ";
 		
 		JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
 
 			@Override
-			public void prepared(PreparedStatement ps) throws SQLException {}
+			public void prepared(PreparedStatement ps) throws SQLException {
+				
+				ps.setInt(1, param.geteIdx());
+				ps.setInt(2, param.getsIdx());
+			}
 
 			@Override
 			public int executeQuery(ResultSet rs) throws SQLException {
@@ -139,6 +151,28 @@ public class BoardDAO {
 			}
 		});
 		return result;
+	}
+	
+	public static int selPagingCnt(final BoardDomain param) {
+		String sql = " SELECT CEIL(COUNT(i_board) / ?) FROM t_board4 ";
+		
+		return JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
+
+			@Override
+			public void prepared(PreparedStatement ps) throws SQLException {
+				ps. setInt(1, param.getRecord_cnt());
+				
+			}
+
+			@Override
+			public int executeQuery(ResultSet rs) throws SQLException {
+				if(rs.next()) {
+					return rs.getInt(1);
+				}
+				return 0;
+			}
+			
+		});
 	}
 	
 	public static int delBoard(BoardVO param) {

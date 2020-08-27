@@ -68,4 +68,8 @@ public class MyUtils {
 		}
 
 	}
+	
+	public static int getIntParameter(HttpServletRequest request, String keyNm) {
+		return parseStrToInt(request.getParameter(keyNm));
+	}
 }

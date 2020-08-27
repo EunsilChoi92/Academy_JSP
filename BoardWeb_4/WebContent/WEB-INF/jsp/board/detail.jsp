@@ -264,14 +264,14 @@
 							<tr class="parentComment">
 								<td>${item.nm }</td>
 								<td id="td${item.i_comment}" colspan="2">
-									<div>
+									<div id="comment${item.i_comment}">
 									<span>${item.commentCtnt}</span>
 										<span class="sysdate">${item.r_dt == item.m_dt ? item.r_dt : item.m_dt}</span>
 									</div>
-									<div class="btns">
+									<div class="btns" id="commentBtn${item.i_comment}">
 			                            <span class="addChildCommentBtn" onclick="CommentInput('td${item.i_comment}')">댓글</span>
 			                            <c:if test="${LoginUser.i_user == item.i_user}">
-			                            	<span class="commentModDelBtn"><span onclick="clickCommentMod('td${item.i_comment}', ${item.i_board}, ${item.i_comment})">수정</span>
+			                            	<span class="commentModDelBtn"><span onclick="clickCommentMod('td${item.i_comment}', 'comment${item.i_comment}', 'commentBtn${item.i_comment}', ${item.i_board}, ${item.i_comment})">수정</span>
 			                            	<a href="/comment/regmoddel?i_board=${item.i_board}&i_comment=${item.i_comment}" onclick="return submitDel()">삭제</a></span>
 			                            </c:if> 
 			                        </div>
@@ -376,12 +376,16 @@
         
         
      	// 댓글 수정 버튼 눌렀을 때
-        function clickCommentMod(id, i_board, i_comment) {
+        function clickCommentMod(id, commentId, commentBtnId, i_board, i_comment) {
+     		
+
+     		
             var commentTd = document.getElementById(id);
             var commentText = commentTd.childNodes[1].childNodes[1].innerText;
-            // 해당 td에 있는 노드 삭제
-            commentTd.childNodes[1].remove();
-            commentTd.childNodes[2].remove();
+
+            // 해당 td 안에 있는 글, 버튼 div 숨김
+            document.getElementById(commentId).hidden = 'true';
+            document.getElementById(commentBtnId).style.display = 'none';
 
             // form태그 생성
             var formTag = document.createElement('form');
@@ -396,7 +400,9 @@
             textareaTag.innerHTML = commentText;
             textareaTag.setAttribute('name', 'modCommentCtnt');
             
-            	// update를 위해 hidden으로 i_board, i_comment 보내기
+            //'comment${item.i_comment}', 'commentBtn${item.i_comment}'
+            
+            // update를 위해 hidden으로 i_board, i_comment 보내기
             var inputHiddenI_board = document.createElement('input');
             inputHiddenI_board.setAttribute('type', 'hidden');
             inputHiddenI_board.setAttribute('name', 'modI_board');
@@ -417,7 +423,7 @@
             var canclebtn = document.createElement('input');
             canclebtn.setAttribute('type', 'button');
             canclebtn.setAttribute('value', '취소');
-            canclebtn.setAttribute('onclick', '');
+            canclebtn.setAttribute('onclick', 'commentModCancle("' + id + '", "' + commentId + '", "' + commentBtnId + '")');
 
             btnsDiv.appendChild(submitbtn);
             btnsDiv.appendChild(canclebtn);
@@ -429,12 +435,19 @@
             
 
             commentTd.appendChild(formTag);
+            
         };
 
-        // 수정 취소 버튼 눌렀을 때
-        // fuctionn commentModCancle(id) {
+     	// 수정 취소 버튼 눌렀을 때s
+        function commentModCancle(id, commentId, commentBtnId) {           
+     		// hidden 속성 삭제
+            document.getElementById(commentId).removeAttribute('hidden');
+            document.getElementById(commentBtnId).removeAttribute('style');
 
-        // }
+            var commentModForm = document.getElementById('modCommentForm');
+            commentModForm.remove();
+            
+        }
         
         
 	</script>

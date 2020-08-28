@@ -6,6 +6,7 @@ public class BoardDomain extends BoardVO{
 	private int record_cnt; // 페이지당 나오는 레코드 수 (글 수)
 	private int sIdx;
 	private int eIdx;
+	private String searchText;
 
 	public String getNm() {
 		return nm;
@@ -46,6 +47,15 @@ public class BoardDomain extends BoardVO{
 	public void seteIdx(int eIdx) {
 		this.eIdx = eIdx;
 	}
+
+	public String getSearchText() {
+		return searchText;
+	}
+
+	public void setSearchText(String searchText) {
+		this.searchText = searchText;
+	}
+	
 	
 
 }

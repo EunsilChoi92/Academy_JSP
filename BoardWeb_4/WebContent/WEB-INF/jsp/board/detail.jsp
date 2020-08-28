@@ -234,7 +234,7 @@
 	        </table>
 			<div class="moddelBtn">
 				<div class="list">
-					<a href="list"><button>글목록</button></a>			
+					<a href="/board/list?page=${param.page}&record_cnt=${param.record_cnt}&searchText=${param.searchText}"><button>글목록</button></a>		
 				</div>
 				<c:if test="${LoginUser.i_user == data.i_user}">
 					<div class="mod">
@@ -309,7 +309,7 @@
 		
         // 좋아요 누르기 function
         function toggleLike(yn_like) {
-        	location.href="/board/toggleLike?i_board=${data.i_board}&yn_like=" + yn_like;
+        	location.href='/board/toggleLike?i_board=${data.i_board}&page=${param.page}&searchText=${param.searchText}&yn_like=' + yn_like;
         }
         
         

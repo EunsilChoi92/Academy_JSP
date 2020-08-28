@@ -22,6 +22,7 @@ public class BoardDAO {
 				+ " 		FROM t_board4 A "
 				+ " 		JOIN t_user B "
 				+ " 		ON A.i_user = B.i_user "
+				+ "			WHERE A.title LIKE ? "
 				+ " 		ORDER BY i_board DESC "
 				+ "     ) A "
 				+ "    where rownum <= ? " 
@@ -33,8 +34,9 @@ public class BoardDAO {
 			@Override
 			public void prepared(PreparedStatement ps) throws SQLException {
 				
-				ps.setInt(1, param.geteIdx());
-				ps.setInt(2, param.getsIdx());
+				ps.setNString(1, param.getSearchText());
+				ps.setInt(2, param.geteIdx());
+				ps.setInt(3, param.getsIdx());
 			}
 
 			@Override
@@ -154,14 +156,15 @@ public class BoardDAO {
 	}
 	
 	public static int selPagingCnt(final BoardDomain param) {
-		String sql = " SELECT CEIL(COUNT(i_board) / ?) FROM t_board4 ";
+		String sql = " SELECT CEIL(COUNT(i_board) / ?) FROM t_board4 "
+				+ " WHERE title LIKE ? ";
 		
 		return JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
 
 			@Override
 			public void prepared(PreparedStatement ps) throws SQLException {
-				ps. setInt(1, param.getRecord_cnt());
-				
+				ps.setInt(1, param.getRecord_cnt());
+				ps.setNString(2, param.getSearchText());
 			}
 
 			@Override

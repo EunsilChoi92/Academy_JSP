@@ -67,6 +67,7 @@ public class BoardDetailSer extends HttpServlet {
 		List<CommentVO> commentList = CommentDAO.selCommentList();
 		request.setAttribute("commentList", commentList);	
 		
+		
 				
 		
 		ViewResolver.forwardLoginChk("board/detail", request, response);

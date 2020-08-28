@@ -41,7 +41,11 @@ public class toggleLikeSer extends HttpServlet {
 		} 
 		
 		
-		response.sendRedirect("/board/detail?i_board="+i_board);
+		int page = MyUtils.getIntParameter(request, "page");
+		String searchText = request.getParameter("searchText");
+	
+		response.sendRedirect(String.format("/board/detail?i_board=%d&searchText=%s&page=%d", i_board, searchText, page));
+
 		
 	}
 

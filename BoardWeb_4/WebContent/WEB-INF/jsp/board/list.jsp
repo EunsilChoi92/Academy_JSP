@@ -146,7 +146,7 @@ input[type="submit"] {
 			<div class="topMsg">
 				<div class="welcome">
 					<span>${LoginUser.nm}님 환영합니다!</span> <a href="/logout"><button>로그아웃</button></a>
-					<a href="/profile">프로필</a>
+					<a href="/profile"><button>프로필</button></a>
 				</div>
 				<div class="btnAndSelect">
 					<div class="btn">
@@ -199,7 +199,14 @@ input[type="submit"] {
 				</c:forEach>
 			</table>
 			<div class="search">
-				<form action="/board/list">
+				<!-- 검색!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+				<form id="searchFrm" action="/board/list" method="get">
+					<select name="selSearch">
+						<option value="titleCtnt" selected>제목+내용</option>
+						<option value="title">제목</option>
+						<option value="ctnt">내용</option>
+						<option value="writer">글쓴이</option>
+					</select>
 					<input type="search" name="searchText">
 					<input type="submit" value="검색">
 				</form>
@@ -228,6 +235,7 @@ input[type="submit"] {
 		function changeRecordCnt() {
 			selFrm.submit();
 		}
+
 
 	</script>
 </body>

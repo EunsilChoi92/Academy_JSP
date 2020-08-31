@@ -7,6 +7,7 @@ public class BoardDomain extends BoardVO{
 	private int sIdx;
 	private int eIdx;
 	private String searchText;
+	private String selSearch;
 
 	public String getNm() {
 		return nm;
@@ -55,6 +56,15 @@ public class BoardDomain extends BoardVO{
 	public void setSearchText(String searchText) {
 		this.searchText = searchText;
 	}
+
+	public String getSelSearch() {
+		return selSearch;
+	}
+
+	public void setSelSearch(String selSearch) {
+		this.selSearch = selSearch;
+	}
+	
 	
 	
 

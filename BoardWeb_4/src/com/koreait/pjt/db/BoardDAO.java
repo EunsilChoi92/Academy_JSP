@@ -14,29 +14,65 @@ public class BoardDAO {
 	public static List<BoardVO> selBoardList(BoardDomain param) {
 		final List<BoardVO> list = new ArrayList();
 		
-		String sql = " select * from "  
-				+ " ( "
-				+ "    select rownum as rnum, A.* from " 
-				+ "		( "
-				+ "			SELECT A.i_board, A.title, A.hits, B.nm, to_char(A.r_dt, 'yyyy/mm/dd hh24:mi:ss') as r_dt "
-				+ " 		FROM t_board4 A "
-				+ " 		JOIN t_user B "
-				+ " 		ON A.i_user = B.i_user "
-				+ "			WHERE A.title LIKE ? "
-				+ " 		ORDER BY i_board DESC "
-				+ "     ) A "
-				+ "    where rownum <= ? " 
-				+ " ) A " 
-				+ " where A.rnum >= ? ";
+//		String sql = " select * from "  
+//				+ " ( "
+//				+ "    select rownum as rnum, A.* from " 
+//				+ "		( "
+//				+ "			SELECT A.i_board, A.title, A.hits, B.nm, to_char(A.r_dt, 'yyyy/mm/dd hh24:mi:ss') as r_dt "
+//				+ " 		FROM t_board4 A "
+//				+ " 		JOIN t_user B "
+//				+ " 		ON A.i_user = B.i_user "
+//				+ "			WHERE A.title LIKE ? "
+//				+ " 		ORDER BY i_board DESC "
+//				+ "     ) A "
+//				+ "    where rownum <= ? " 
+//				+ " ) A " 
+//				+ " where A.rnum >= ? ";
 		
-		JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
+		StringBuilder sb = new StringBuilder(" select * from ");
+		sb.append(" ( ");
+		sb.append(" select rownum as rnum, A.* from ");
+		sb.append(" ( ");
+		sb.append(" SELECT A.i_board, A.title, A.hits, B.nm, to_char(A.r_dt, 'yyyy/mm/dd hh24:mi:ss') as r_dt ");
+		sb.append(" FROM t_board4 A ");
+		sb.append(" JOIN t_user B ");
+		sb.append(" ON A.i_user = B.i_user ");
+		sb.append(" WHERE ");
+		
+		
+		String selSearch = param.getSelSearch();
+		
+		if(selSearch.equals("title")) {
+			sb.append(" A.title LIKE '");
+		} else if(selSearch.equals("ctnt")) {
+			sb.append(" A.ctnt LIKE '");
+		} else if(selSearch.equals("ctnt")) {
+			sb.append(" A.title LIKE '");
+			sb.append(param.getSearchText());
+			sb.append("' OR A.ctnt LIKE '");
+		} else if(selSearch.equals("writer")) {
+			sb.append(" B.nm LIKE '");
+		}
+		
+		sb.append(param.getSearchText());
+		sb.append("' ORDER BY i_board DESC ");
+		sb.append(" ) A ");
+		sb.append(" where rownum <= ");
+		sb.append(param.geteIdx());
+		sb.append(" ) A ");
+		sb.append(" where A.rnum >= ");
+		sb.append(param.getsIdx());
+
+		
+		
+		JdbcTemplate.executeQuery(sb.toString(), new JdbcSelectInterface() {
 
 			@Override
 			public void prepared(PreparedStatement ps) throws SQLException {
 				
-				ps.setNString(1, param.getSearchText());
-				ps.setInt(2, param.geteIdx());
-				ps.setInt(3, param.getsIdx());
+//				ps.setNString(1, param.getSearchText());
+//				ps.setInt(2, param.geteIdx());
+//				ps.setInt(3, param.getsIdx());
 			}
 
 			@Override

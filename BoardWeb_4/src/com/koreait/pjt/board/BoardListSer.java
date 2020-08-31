@@ -24,6 +24,9 @@ public class BoardListSer extends HttpServlet {
    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		String selSearch = request.getParameter("selSearch");
+		System.out.println("selSearch : " + selSearch);
+	
 		String searchText = request.getParameter("searchText");
 		searchText = (searchText == null ? "" : searchText);
 		
@@ -41,6 +44,8 @@ public class BoardListSer extends HttpServlet {
 		param.setsIdx(sIdx);
 		param.setRecord_cnt(recordCnt);
 		param.setSearchText("%" + searchText + "%");
+		// selSearch 추가
+		param.setSelSearch(selSearch);
 		
 		int pagingCnt = BoardDAO.selPagingCnt(param);
 	

@@ -1,5 +1,6 @@
 package com.koreait.pjt.db;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,8 +12,8 @@ import com.koreait.pjt.vo.BoardVO;
 
 public class BoardDAO {
 	
-	public static List<BoardVO> selBoardList(BoardDomain param) {
-		final List<BoardVO> list = new ArrayList();
+	public static List<BoardDomain> selBoardList(BoardDomain param) {
+		final List<BoardDomain> list = new ArrayList();
 		
 //		String sql = " select * from "  
 //				+ " ( "
@@ -33,46 +34,61 @@ public class BoardDAO {
 		sb.append(" ( ");
 		sb.append(" select rownum as rnum, A.* from ");
 		sb.append(" ( ");
-		sb.append(" SELECT A.i_board, A.title, A.hits, B.nm, to_char(A.r_dt, 'yyyy/mm/dd hh24:mi:ss') as r_dt ");
+		sb.append(" SELECT A.i_board, A.title, A.hits ");
+		sb.append(" , to_char(A.r_dt, 'yyyy/mm/dd hh24:mi:ss') as r_dt ");
+		sb.append(" , nvl(B.cnt, 0) as like_cnt ");
+		sb.append(" , nvl(C.cnt, 0) as cmt_cnt ");
+		sb.append(" , DECODE(D.i_board, null, 0, 1) as yn_like ");
+		sb.append(" , E.nm, E.profile_img ");
 		sb.append(" FROM t_board4 A ");
-		sb.append(" JOIN t_user B ");
-		sb.append(" ON A.i_user = B.i_user ");
+		sb.append(" LEFT JOIN ( ");
+		sb.append(" SELECT i_board, count(i_board) as cnt FROM t_board4_like GROUP BY i_board ");
+		sb.append(" ) B ");
+		sb.append(" ON A.i_board = B.i_board ");
+		sb.append(" LEFT JOIN ( ");
+		sb.append(" SELECT i_board, count(i_board) as cnt FROM t_comment GROUP BY i_board ");
+		sb.append(" ) C ");
+		sb.append(" ON A.i_board = C.i_board ");
+		sb.append(" LEFT JOIN ( ");
+		sb.append(" SELECT * FROM t_board4_like WHERE i_user = ");
+		sb.append(param.getI_user());
+		sb.append(" ) D ");
+		sb.append(" ON A.i_board = D.i_board ");
+		sb.append(" JOIN t_user E ");
+		sb.append(" ON A.i_user = E.i_user ");
 		sb.append(" WHERE ");
 		
 		
 		String selSearch = param.getSelSearch();
 		
 		if(selSearch.equals("title")) {
-			sb.append(" A.title LIKE '");
+			sb.append(" (A.title LIKE ?");
 		} else if(selSearch.equals("ctnt")) {
-			sb.append(" A.ctnt LIKE '");
-		} else if(selSearch.equals("ctnt")) {
-			sb.append(" A.title LIKE '");
-			sb.append(param.getSearchText());
-			sb.append("' OR A.ctnt LIKE '");
+			sb.append(" (A.ctnt LIKE ?");
+		} else if(selSearch.equals("titleCtnt")) {
+			sb.append(" (A.title LIKE ?");			
+			sb.append(") OR (A.ctnt LIKE ?");
 		} else if(selSearch.equals("writer")) {
-			sb.append(" B.nm LIKE '");
+			sb.append(" (E.nm LIKE ?");
 		}
 		
-		sb.append(param.getSearchText());
-		sb.append("' ORDER BY i_board DESC ");
+		sb.append(") ORDER BY i_board DESC ");
 		sb.append(" ) A ");
 		sb.append(" where rownum <= ");
 		sb.append(param.geteIdx());
 		sb.append(" ) A ");
 		sb.append(" where A.rnum >= ");
 		sb.append(param.getsIdx());
-
-		
-		
+				
 		JdbcTemplate.executeQuery(sb.toString(), new JdbcSelectInterface() {
 
 			@Override
-			public void prepared(PreparedStatement ps) throws SQLException {
+			public void prepared(PreparedStatement ps) throws SQLException {				
+				ps.setNString(1, param.getSearchText());
 				
-//				ps.setNString(1, param.getSearchText());
-//				ps.setInt(2, param.geteIdx());
-//				ps.setInt(3, param.getsIdx());
+				if(selSearch.equals("titleCtnt")) {
+					ps.setNString(2, param.getSearchText());	
+				}
 			}
 
 			@Override
@@ -83,14 +99,22 @@ public class BoardDAO {
 					int hits = rs.getInt("hits");
 					String nm = rs.getNString("nm");
 					String r_dt = rs.getNString("r_dt");
+					String profile_img = rs.getNString("profile_img");
+					int yn_like = rs.getInt("yn_like");
+					int like_cnt = rs.getInt("like_cnt");
+					int cmt_cnt = rs.getInt("cmt_cnt");
 					
-					BoardVO vo = new BoardVO(); 
+					BoardDomain vo = new BoardDomain(); 
 					vo.setI_board(i_board);
 					vo.setTitle(title);
 					vo.setHits(hits);
 					vo.setNm(nm);
 					vo.setR_dt(r_dt);
-					
+					vo.setProfile_img(profile_img);
+					vo.setYn_like(yn_like);
+					vo.setLike_cnt(like_cnt);
+					vo.setCmt_cnt(cmt_cnt);
+						
 					list.add(vo);
 				}
 				return 1;
@@ -99,6 +123,7 @@ public class BoardDAO {
 		
 		return list;	
 	}
+	
 	
 	public static int insBoard(BoardVO param) {
 
@@ -143,7 +168,7 @@ public class BoardDAO {
 		result.setI_board(param.getI_board());
 		
 		String sql = " SELECT A.title, A.ctnt, A.hits, A.i_user, "
-				+ " A.r_dt, A.m_dt, B.nm, DECODE(C.i_user, null, 0, 1) as yn_like "
+				+ " A.r_dt, A.m_dt, B.nm, B.profile_img, DECODE(C.i_user, null, 0, 1) as yn_like "
 				+ " FROM t_board4 A "
 				+ " INNER JOIN t_user B "
 				+ " ON A.i_user = B.i_user "
@@ -171,6 +196,7 @@ public class BoardDAO {
 					String m_dt = rs.getNString("m_dt");
 					int i_user = rs.getInt("i_user");
 					int yn_like = rs.getInt("yn_like");
+					String profile_img = rs.getNString("profile_img");
 					
 					System.out.println("title : " + title);
 					System.out.println("i_user : " + i_user);
@@ -184,6 +210,7 @@ public class BoardDAO {
 					result.setM_dt(m_dt);
 					result.setI_user(i_user);
 					result.setYn_like(yn_like);
+					result.setProfile_img(profile_img);
 				}
 				return 1;
 			}

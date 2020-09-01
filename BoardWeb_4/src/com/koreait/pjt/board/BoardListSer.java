@@ -25,10 +25,13 @@ public class BoardListSer extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String selSearch = request.getParameter("selSearch");
-		System.out.println("selSearch : " + selSearch);
+		selSearch = ((selSearch == null) || (selSearch == "") ? "titleCtnt" : selSearch);
+//		System.out.println("selSearch : " + selSearch);
+		
 	
 		String searchText = request.getParameter("searchText");
 		searchText = (searchText == null ? "" : searchText);
+//		System.out.println("searchText : " + searchText);
 		
 		int page = MyUtils.getIntParameter(request, "page");
 		page = (page == 0) ? 1 : page;
@@ -39,6 +42,9 @@ public class BoardListSer extends HttpServlet {
 		int eIdx = page * recordCnt;
 		int sIdx = eIdx - recordCnt;
 		
+//		System.out.println("eIdx : " + eIdx);
+//		System.out.println("sIdx : " + sIdx);
+		
 		BoardDomain param = new BoardDomain();
 		param.seteIdx(eIdx);
 		param.setsIdx(sIdx);
@@ -46,6 +52,7 @@ public class BoardListSer extends HttpServlet {
 		param.setSearchText("%" + searchText + "%");
 		// selSearch 추가
 		param.setSelSearch(selSearch);
+		param.setI_user(MyUtils.getLoginUser(request).getI_user());
 		
 		int pagingCnt = BoardDAO.selPagingCnt(param);
 	
@@ -61,7 +68,7 @@ public class BoardListSer extends HttpServlet {
 		
 		request.setAttribute("pagingCnt", pagingCnt);
 		
-		List<BoardVO> list = BoardDAO.selBoardList(param);
+		List<BoardDomain> list = BoardDAO.selBoardList(param);
 		request.setAttribute("list", list);
 		
 		

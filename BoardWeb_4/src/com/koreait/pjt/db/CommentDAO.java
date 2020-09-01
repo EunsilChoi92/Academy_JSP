@@ -14,7 +14,7 @@ public class CommentDAO {
 		final List<CommentVO> list = new ArrayList();
 		
 		String sql = " SELECT A.i_comment, A.i_board, "
-				+ " A.i_user, A.commentCtnt, B.nm, "
+				+ " A.i_user, A.commentCtnt, B.nm, B.profile_img, "
 				+ " to_char(A.r_dt, 'yyyy/mm/dd hh24:mi:ss') as r_dt, "
 				+ " to_char(A.m_dt, 'yyyy/mm/dd hh24:mi:ss') as m_dt "
 				+ " FROM t_comment A "
@@ -37,6 +37,7 @@ public class CommentDAO {
 					String nm = rs.getNString("nm");
 					String r_dt = rs.getNString("r_dt");
 					String m_dt = rs.getNString("m_dt");
+					String profile_img = rs.getNString("profile_img");
 					
 					CommentVO vo = new CommentVO();
 					
@@ -47,6 +48,7 @@ public class CommentDAO {
 					vo.setNm(nm);
 					vo.setR_dt(r_dt);
 					vo.setM_dt(m_dt);
+					vo.setProfile_img(profile_img);
 					
 					list.add(vo);
 				}

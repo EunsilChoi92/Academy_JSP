@@ -200,6 +200,19 @@
         	color: red;
         	cursor: pointer;
         }
+        .containerpImg {
+			display: inline-block;	
+			width: 25px;
+			height: 25px;
+			border-radius: 50%;
+			overflow: hidden;
+			display: flex;
+			align-items: center;
+		}
+		.pImg {
+			object-fit: cover;
+			max-width:100%;
+		}
 		
 
 </style>
@@ -211,6 +224,18 @@
 	            <tr>
 	                <td rowspan="2">${data.i_board}</td>
 	                <td rowspan="2">${data.title }</td>
+	                <td width="50px">
+                		<div class="containerpImg">
+							<c:choose>
+				               <c:when test="${item.profile_img != null}">
+				                  <img class="pImg" src="/img/user/${LoginUser.i_user}/${item.profile_img }">
+				               </c:when>
+				               <c:otherwise>
+				                  <img class="pImg" src="/img/default_profile.jpg">
+				               </c:otherwise>
+				            </c:choose>
+						</div>
+	                </td>
 	                <td>${data.nm }</td>
 	                <td rowspan="2">조회수 ${data.hits }</td>
 	                <td rowspan="2">
@@ -226,10 +251,10 @@
 	                </td>
 	            </tr>
 	            <tr>
-	                <td>${data.r_dt == data.m_dt ? data.r_dt : data.m_dt }</td>
+	                <td colspan="2">${data.r_dt == data.m_dt ? data.r_dt : data.m_dt }</td>
 	            </tr>
 	            <tr>
-	                <td colspan="5" valign="top">${data.ctnt }</td>
+	                <td colspan="6" valign="top">${data.ctnt }</td>
 	            </tr>
 	        </table>
 			<div class="moddelBtn">
@@ -262,7 +287,19 @@
 							<c:set var="isCommentEmpty" value="false"></c:set>
 							
 							<tr class="parentComment">
-								<td>${item.nm }</td>
+								<td>
+									<div class="containerpImg">
+										<c:choose>
+							               <c:when test="${item.profile_img != null}">
+							                  <img class="pImg" src="/img/user/${LoginUser.i_user}/${item.profile_img }">
+							               </c:when>
+							               <c:otherwise>
+							                  <img class="pImg" src="/img/default_profile.jpg">
+							               </c:otherwise>
+							            </c:choose>
+									</div>
+									${item.nm }
+								</td>
 								<td id="td${item.i_comment}" colspan="2">
 									<div id="comment${item.i_comment}">
 									<span>${item.commentCtnt}</span>

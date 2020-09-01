@@ -63,8 +63,13 @@ public class BoardRegmodSer extends HttpServlet {
 		
 		BoardVO param = new BoardVO();
 		
-		param.setTitle(title);
-		param.setCtnt(ctnt);
+		String filter1 = scriptFilter(title);
+		String filter2 = scriptFilter(ctnt);
+		String filter3 = swearWordFilter(filter1);
+		String filter4 = swearWordFilter(filter2);
+		
+		param.setTitle(filter3);
+		param.setCtnt(filter4);
 		param.setI_user(i_user);
 		
 		
@@ -97,9 +102,32 @@ public class BoardRegmodSer extends HttpServlet {
 		}
 		
 		// 디테일 띄우기
-		//request.setAttribute("i_user", i_user);
 		response.sendRedirect("/board/detail?i_board="+i_board);
-		//ViewResolver.forward("board/detail?i_user=" + i_user, request, response);
+
 	}
 
+	// 욕 필터
+	private String swearWordFilter(final String ctnt) {
+		String[] filters = {"개새끼", "미친년", "ㄱㅐㅅㅐㄲㅣ"};
+		String result = ctnt;
+		for(int i=0; i<filters.length; i++) {
+			result = result.replace(filters[i], "***");
+		}
+		return result;
+	}
+	
+	
+	// 스크립트 필터
+	private String scriptFilter(final String ctnt) {
+		String[] filters = {"<script>", "</script>"};
+		String[] filterReplaces = {"&lt;script&gt;", "&lt;/script&gt;"};
+		
+		String result = ctnt;
+		for(int i=0; i<filters.length; i++) {
+			result = result.replace(filters[i], filterReplaces[i]);
+		}
+		
+		return result;
+	}
+	
 }

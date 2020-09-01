@@ -13,6 +13,7 @@
 <head>
 <meta charset="UTF-8">
 <title>리스트</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style>
 @import
 	url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&display=swap')
@@ -77,6 +78,8 @@ table {
 
 tablte tr {
 	height: 50px;
+
+	
 }
 
 .itemRow {
@@ -137,6 +140,24 @@ input[type="submit"] {
 	border: 1px solid darkgray;
 	padding: 3px;
 }
+.containerpImg {
+	display: inline-block;	
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+}
+.pImg {
+	object-fit: cover;
+	max-width:100%;
+}
+/* 좋아요 하트 */
+.material-icons {
+	color: darkgray;
+}
+
 </style>
 </head>
 <body>
@@ -154,6 +175,7 @@ input[type="submit"] {
 					</div>
 					<div class="selectPagingCnt">
 						<form id="selFrm" action="/board/list" method="get">
+							<input type="hidden" name="selSearch" value="${param.selSearch}">
 							<input type="hidden" name="page" value="${(param.page == null) ? 1 : param.page}"> 
 							<input type="hidden" name="searchText" value="${param.searchText}"> 
 								<select name="record_cnt" onchange="changeRecordCnt()">
@@ -176,22 +198,47 @@ input[type="submit"] {
 				<tr height="50px">
 					<th width="60px">No</th>
 					<th width="400px">제목</th>
+					<th> </th>
 					<th width="100px">작성자</th>
 					<th width="60px">조회수</th>
 					<th width="180px">작성일</th>
 				</tr>
 				<tr>
-					<td colspan="5" style="color: red; text-align: center">게시판 테러,
+					<td colspan="6" style="color: red; text-align: center">게시판 테러,
 						광고, 스팸글 금지^^ 어길 시 지상렬(feat. 김효진)
 					</th>
 				</tr>
 				<c:if test="${empty list}">
-					<td colspan="5">게시글이 없습니다.</td>
+					<td colspan="6">게시글이 없습니다.</td>
 				</c:if>
 				<c:forEach items="${list}" var="item">
 					<tr class="itemRow" onclick="moveToDetail(${item.i_board})">
 						<td>${item.i_board }</td>
-						<td>${item.title}</td>
+						<td>
+							${item.title}
+							<span style="color: darkgray; font-size: 14px; padding-left: 3px;">(${item.cmt_cnt })</span>
+							<span class="material-icons">
+			                	<c:if test="${item.yn_like == 1 }">
+			                		favorite
+			                	</c:if>
+			                	<c:if test="${item.yn_like == 0 }">
+			                		favorite_border
+			                	</c:if>
+		                	</span>
+		                	<span style="color: darkgray; font-size: 14px; padding-left: 3px;">${item.like_cnt }</span>
+						</td>
+						<td>
+							<div class="containerpImg">
+								<c:choose>
+					               <c:when test="${item.profile_img != null}">
+					                  <img class="pImg" src="/img/user/${LoginUser.i_user}/${item.profile_img }">
+					               </c:when>
+					               <c:otherwise>
+					                  <img class="pImg" src="/img/default_profile.jpg">
+					               </c:otherwise>
+					            </c:choose>
+							</div>
+						</td>
 						<td>${item.nm }</td>
 						<td>${item.hits }</td>
 						<td>${item.r_dt }</td>
@@ -202,7 +249,7 @@ input[type="submit"] {
 				<!-- 검색!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 				<form id="searchFrm" action="/board/list" method="get">
 					<select name="selSearch">
-						<option value="titleCtnt" selected>제목+내용</option>
+						<option value="titleCtnt">제목+내용</option>
 						<option value="title">제목</option>
 						<option value="ctnt">내용</option>
 						<option value="writer">글쓴이</option>
@@ -219,7 +266,7 @@ input[type="submit"] {
 							<span>${index}</span>
 						</c:when>
 						<c:otherwise>
-							<a href="/board/list?page=${index}&record_cnt=${param.record_cnt}&searchText=${param.searchText}">${index}</a>
+							<a href="/board/list?page=${index}&record_cnt=${param.record_cnt}&selSearch=${param.selSearch}&searchText=${param.searchText}">${index}</a>
 						</c:otherwise>
 					</c:choose>
 				</c:forEach>
@@ -230,7 +277,7 @@ input[type="submit"] {
 		function moveToDetail(i_board) {
 			console.log('moveToDetail - i_board : ' + i_board);
 			/*location.href = '/board/detail?i_board=' + i_board + '&page=${page}&record_cnt=' + selFrm.record_cnt.value;*/
-			location.href = '/board/detail?i_board=' + i_board + '&page=${page}&record_cnt=${param.record_cnt}&searchText=${param.searchText}';
+			location.href = '/board/detail?i_board=' + i_board + '&page=${page}&record_cnt=${param.record_cnt}&searchText=${param.searchText}&selSearch=${param.selSearch}';
 		}
 		function changeRecordCnt() {
 			selFrm.submit();

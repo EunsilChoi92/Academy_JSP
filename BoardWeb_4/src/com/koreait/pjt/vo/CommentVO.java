@@ -8,6 +8,7 @@ public class CommentVO {
 	private String r_dt;
 	private String m_dt;
 	private String nm;
+	private String profile_img;
 	
 	public int getI_comment() {
 		return i_comment;
@@ -50,6 +51,12 @@ public class CommentVO {
 	}
 	public void setNm(String nm) {
 		this.nm = nm;
+	}
+	public String getProfile_img() {
+		return profile_img;
+	}
+	public void setProfile_img(String profile_img) {
+		this.profile_img = profile_img;
 	}
 	
 }

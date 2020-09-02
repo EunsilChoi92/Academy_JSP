@@ -27,6 +27,7 @@ public class BoardListSer extends HttpServlet {
 		String selSearch = request.getParameter("selSearch");
 		selSearch = ((selSearch == null) || (selSearch == "") ? "titleCtnt" : selSearch);
 //		System.out.println("selSearch : " + selSearch);
+		request.setAttribute("selSearch", selSearch);
 		
 	
 		String searchText = request.getParameter("searchText");
@@ -69,6 +70,16 @@ public class BoardListSer extends HttpServlet {
 		request.setAttribute("pagingCnt", pagingCnt);
 		
 		List<BoardDomain> list = BoardDAO.selBoardList(param);
+		
+		if(!"".equals(searchText) && ("title".equals(selSearch) || "titleCtnt".equals(selSearch))) {
+			for(BoardDomain item : list) {
+					String title = item.getTitle();
+					title = title.replace(
+							searchText
+							, "<span style='color: darkgray;'>" + searchText + "</span>");
+					item.setTitle(title);
+				}
+		}
 		request.setAttribute("list", list);
 		
 		

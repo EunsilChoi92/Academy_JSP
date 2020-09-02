@@ -249,15 +249,15 @@ input[type="submit"] {
 				<!-- 검색!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 				<form id="searchFrm" action="/board/list" method="get">
 					<select name="selSearch">
-						<option value="titleCtnt">제목+내용</option>
-						<option value="title">제목</option>
-						<option value="ctnt">내용</option>
-						<option value="writer">글쓴이</option>
+						<option value="titleCtnt" ${selSearch == 'titleCtnt' ? 'selected' : '' }>제목+내용</option>
+						<option value="title" ${selSearch == 'title' ? 'selected' : '' }>제목</option>
+						<option value="ctnt" ${selSearch == 'ctnt' ? 'selected' : '' }>내용</option>
+						<option value="writer" ${selSearch == 'writer' ? 'selected' : '' }>글쓴이</option>
 					</select>
-					<input type="search" name="searchText">
+					<input type="search" name="searchText" value="${param.searchText }">
 					<input type="submit" value="검색">
 				</form>
-				<a href="/board/list?page=${param.page}&record_cnt=${param.record_cnt}&searchText="><button>취소</button></a>
+				<a href="/board/list?page=${param.page}&record_cnt=${param.record_cnt}"><button>취소</button></a>
 			</div>
 			<div class="pagingCnts">
 				<c:forEach var="index" begin="1" end="${pagingCnt }">
@@ -283,6 +283,9 @@ input[type="submit"] {
 			selFrm.submit();
 		}
 
+		function colorChagne(ctnt, searchText) {
+			
+		}
 
 	</script>
 </body>

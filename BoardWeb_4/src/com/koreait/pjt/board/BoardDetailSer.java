@@ -53,10 +53,31 @@ public class BoardDetailSer extends HttpServlet {
 		// 좋아요 - 로그인한 유저의 i_user 정보 넣기
 		param.setI_user(loginUser.getI_user());
 		// 좋아요 여기까지
-				
+		
+		// 검색 select, text 받아오기
+		String selSearch = request.getParameter("selSearch");
+		selSearch = ((selSearch == null) || (selSearch == "") ? "titleCtnt" : selSearch);
+		
+		String searchText = request.getParameter("searchText");
+		searchText = (searchText == null ? "" : searchText);
+		
+		request.setAttribute("selSearch", selSearch);
+		request.setAttribute("searchText", searchText);
+		
+		System.out.println("selSearch : " + selSearch);
+		System.out.println("searchText : " + searchText);
+		
 		
 		BoardDomain data = BoardDAO.selBoard(param);
-		System.out.println(data.getYn_like());
+		
+//		if(!"".equals(searchText) && ("ctnt".equals(selSearch) || "titleCtnt".equals(selSearch))) {
+//				String ctnt = data.getCtnt();
+//				ctnt = ctnt.replace(
+//						searchText
+//						, "<span style='color: darkgray;'>" + searchText + "</span>");
+//				data.setCtnt(ctnt);
+//		}
+		
 		request.setAttribute("data", data);
 		
 		// 좋아요 숫자 표시

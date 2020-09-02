@@ -223,7 +223,7 @@
 			<table>
 	            <tr>
 	                <td rowspan="2">${data.i_board}</td>
-	                <td rowspan="2">${data.title }</td>
+	                <td rowspan="2" id="elTitle">${data.title }</td>
 	                <td width="50px">
                 		<div class="containerpImg">
 							<c:choose>
@@ -254,12 +254,12 @@
 	                <td colspan="2">${data.r_dt == data.m_dt ? data.r_dt : data.m_dt }</td>
 	            </tr>
 	            <tr>
-	                <td colspan="6" valign="top">${data.ctnt }</td>
+	                <td colspan="6" valign="top" id="elCtnt">${data.ctnt }</td>
 	            </tr>
 	        </table>
 			<div class="moddelBtn">
 				<div class="list">
-					<a href="/board/list?page=${param.page}&record_cnt=${param.record_cnt}&searchText=${param.searchText}"><button>글목록</button></a>		
+					<a href="/board/list?page=${param.page}&record_cnt=${param.record_cnt}&selSearch=${selSearch}&searchText=${searchText}"><button>글목록</button></a>		
 				</div>
 				<c:if test="${LoginUser.i_user == data.i_user}">
 					<div class="mod">
@@ -485,6 +485,35 @@
             commentModForm.remove();
             
         }
+     	
+     	// 검색 후 색깔 바꾸기
+     	function doHighlight() {
+     		var selSearch = '${selSearch}';
+     		var searchText = '${searchText}';
+     		
+     	switch(selSearch) {
+     	case 'title':
+     		var txt = elTitle.innerText;
+     		txt = txt.replace(new RegExp('${searchText}', 'gi'), '<span style="color: darkgray">' + searchText + '</span>');
+     		elTitle.innerHTML = txt;
+     		break;
+     	case 'ctnt':
+     		var txt = elCtnt.innerText;
+     		txt = txt.replace(new RegExp('${searchText}', 'gi'), '<span style="color: darkgray">' + searchText + '</span>');
+     		elCtnt.innerHTML = txt;
+     		break;
+     	case 'titleCtnt':
+     		var txt = elTitle.innerText;
+     		txt = txt.replace(new RegExp('${searchText}', 'gi'), '<span style="color: darkgray">' + searchText + '</span>');
+     		elTitle.innerHTML = txt;
+     		
+     		txt = elCtnt.innerText;
+     		txt = txt.replace(new RegExp('${searchText}', 'gi'), '<span style="color: darkgray">' + searchText + '</span>');
+     		elCtnt.innerHTML = txt;
+     		break;
+     	}
+     		
+     	}
         
         
 	</script>

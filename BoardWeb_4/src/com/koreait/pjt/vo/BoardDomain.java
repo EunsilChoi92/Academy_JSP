@@ -95,6 +95,8 @@ public class BoardDomain extends BoardVO{
 	public void setCmt_cnt(int cmt_cnt) {
 		this.cmt_cnt = cmt_cnt;
 	}
+
+
 	
 	
 	

@@ -104,6 +104,7 @@ public class BoardDAO {
 					int like_cnt = rs.getInt("like_cnt");
 					int cmt_cnt = rs.getInt("cmt_cnt");
 					
+				
 					BoardDomain vo = new BoardDomain(); 
 					vo.setI_board(i_board);
 					vo.setTitle(title);
@@ -219,15 +220,38 @@ public class BoardDAO {
 	}
 	
 	public static int selPagingCnt(final BoardDomain param) {
-		String sql = " SELECT CEIL(COUNT(i_board) / ?) FROM t_board4 "
-				+ " WHERE title LIKE ? ";
+//		String sql = " SELECT CEIL(COUNT(i_board) / ?) FROM t_board4 "
+//				+ " WHERE title LIKE ? ";
 		
-		return JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
+		StringBuilder sb = new StringBuilder(" SELECT CEIL(COUNT(A.i_board) / ?) FROM t_board4 A ");
+		sb.append(" JOIN t_user B ");
+		sb.append(" ON A.i_user = B.i_user ");
+		sb.append(" WHERE ");
+		
+		String selSearch = param.getSelSearch();
+		if(selSearch.equals("title")) {
+			sb.append(" (A.title LIKE ?");
+		} else if(selSearch.equals("ctnt")) {
+			sb.append(" (A.ctnt LIKE ?");
+		} else if(selSearch.equals("titleCtnt")) {
+			sb.append(" (A.title LIKE ?");			
+			sb.append(") OR (A.ctnt LIKE ?");
+		} else if(selSearch.equals("writer")) {
+			sb.append(" (B.nm LIKE ?");
+		}
+		sb.append(") ");
+		
+		return JdbcTemplate.executeQuery(sb.toString(), new JdbcSelectInterface() {
 
 			@Override
 			public void prepared(PreparedStatement ps) throws SQLException {
-				ps.setInt(1, param.getRecord_cnt());
-				ps.setNString(2, param.getSearchText());
+				int seq = 1;
+				
+				ps.setInt(seq++, param.getRecord_cnt());
+				ps.setNString(seq++, param.getSearchText());
+				if(param.getSelSearch().equals("titleCtnt")) {
+					ps.setNString(seq++, param.getSearchText());
+				}
 			}
 
 			@Override

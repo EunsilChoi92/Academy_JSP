@@ -23,15 +23,15 @@ public class BoardDelSer extends HttpServlet {
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String strI_board = request.getParameter("i_board");
-		int i_board = MyUtils.parseStrToInt(strI_board);
-		
 		UserVO loginUser = MyUtils.getLoginUser(request);
 		if(loginUser == null) {
 			response.sendRedirect("/login");
 			return;
 		}
 		
+		String strI_board = request.getParameter("i_board");
+		int i_board = MyUtils.parseStrToInt(strI_board);
+				
 		BoardVO param = new BoardVO();
 		param.setI_board(i_board);
 		param.setI_user(loginUser.getI_user());

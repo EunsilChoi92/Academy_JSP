@@ -1,6 +1,7 @@
 package com.koreait.pjt.board;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -16,6 +17,7 @@ import com.koreait.pjt.ViewResolver;
 import com.koreait.pjt.db.BoardDAO;
 import com.koreait.pjt.vo.BoardDomain;
 import com.koreait.pjt.vo.BoardVO;
+import com.koreait.pjt.vo.UserVO;
 
 
 @WebServlet("/board/list")
@@ -23,6 +25,12 @@ public class BoardListSer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		UserVO loginUser = MyUtils.getLoginUser(request);
+		if(loginUser == null) {
+			response.sendRedirect("/login");
+			return;
+		}
+		
 		
 		String selSearch = request.getParameter("selSearch");
 		selSearch = ((selSearch == null) || (selSearch == "") ? "titleCtnt" : selSearch);
@@ -32,6 +40,7 @@ public class BoardListSer extends HttpServlet {
 	
 		String searchText = request.getParameter("searchText");
 		searchText = (searchText == null ? "" : searchText);
+		searchText = URLEncoder.encode(searchText, "UTF-8");
 //		System.out.println("searchText : " + searchText);
 		
 		int page = MyUtils.getIntParameter(request, "page");

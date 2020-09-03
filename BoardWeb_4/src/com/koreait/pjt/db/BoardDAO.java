@@ -169,13 +169,20 @@ public class BoardDAO {
 		result.setI_board(param.getI_board());
 		
 		String sql = " SELECT A.title, A.ctnt, A.hits, A.i_user, "
-				+ " A.r_dt, A.m_dt, B.nm, B.profile_img, DECODE(C.i_user, null, 0, 1) as yn_like "
+				+ " A.r_dt, A.m_dt, B.nm, B.profile_img, DECODE(C.i_user, null, 0, 1) as yn_like,"
+				+ " nvl(D.cnt, 0) as like_cnt "
 				+ " FROM t_board4 A "
 				+ " INNER JOIN t_user B "
 				+ " ON A.i_user = B.i_user "
 				+ " LEFT JOIN t_board4_like C "
 				+ " ON A.i_board = C.i_board "
 				+ " AND C.i_user = ? "
+				+ " LEFT JOIN ( "
+				+ " 	SELECT i_board, count(i_board) as cnt FROM t_board4_like "
+				+ "		WHERE i_board = ? "
+				+ "		GROUP BY i_board "
+				+ " ) D "
+				+ " ON A.i_board = D.i_board "
 				+ " WHERE A.i_board = ? ";
 		
 		int resultInt = JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
@@ -184,6 +191,7 @@ public class BoardDAO {
 			public void prepared(PreparedStatement ps) throws SQLException {
 				ps.setInt(1, param.getI_user());
 				ps.setInt(2, param.getI_board());
+				ps.setInt(3, param.getI_board());
 			}
 
 			@Override
@@ -198,6 +206,7 @@ public class BoardDAO {
 					int i_user = rs.getInt("i_user");
 					int yn_like = rs.getInt("yn_like");
 					String profile_img = rs.getNString("profile_img");
+					int like_cnt = rs.getInt("like_cnt");
 					
 					System.out.println("title : " + title);
 					System.out.println("i_user : " + i_user);
@@ -212,6 +221,7 @@ public class BoardDAO {
 					result.setI_user(i_user);
 					result.setYn_like(yn_like);
 					result.setProfile_img(profile_img);
+					result.setLike_cnt(like_cnt);
 				}
 				return 1;
 			}
@@ -277,7 +287,7 @@ public class BoardDAO {
 			}
 		});
 	}
-	
+		
 	public static int updBoard(BoardVO param) {
 		String sql = " UPDATE t_board4 SET title = ?, ctnt = ?, m_dt = sysdate WHERE i_board = ? AND i_user = ? ";
 		

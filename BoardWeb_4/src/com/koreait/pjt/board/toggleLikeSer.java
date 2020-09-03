@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.koreait.pjt.MyUtils;
 import com.koreait.pjt.db.BoardLikeDAO;
 import com.koreait.pjt.vo.BoardVO;
+import com.koreait.pjt.vo.UserVO;
 
 @WebServlet("/board/toggleLike")
 public class toggleLikeSer extends HttpServlet {
@@ -17,6 +18,12 @@ public class toggleLikeSer extends HttpServlet {
        
    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		UserVO loginUser = MyUtils.getLoginUser(request);
+		if(loginUser == null) {
+			response.sendRedirect("/login");
+			return;
+		}
+		
 		String strI_board = request.getParameter("i_board");
 		int i_board = MyUtils.parseStrToInt(strI_board);
 		

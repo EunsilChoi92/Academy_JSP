@@ -18,6 +18,7 @@ public class JoinSer extends HttpServlet {
        
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		ViewResolver.forward("user/join", request, response);
 
 	}

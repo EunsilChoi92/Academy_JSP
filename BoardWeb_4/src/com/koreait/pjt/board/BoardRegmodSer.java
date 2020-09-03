@@ -24,6 +24,12 @@ public class BoardRegmodSer extends HttpServlet {
 	// 화면 띄우기(등록/수정창)
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
+		UserVO loginUser = MyUtils.getLoginUser(request);
+		if(loginUser == null) {
+			response.sendRedirect("/login");
+			return;
+		}
+		
 		String strI_board = request.getParameter("i_board");
 		
 		if(strI_board != null) {
@@ -49,6 +55,12 @@ public class BoardRegmodSer extends HttpServlet {
 
 	// 처리 용도(실제로 DB에 등록/수정 실시)
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		UserVO loginUser = MyUtils.getLoginUser(request);
+		if(loginUser == null) {
+			response.sendRedirect("/login");
+			return;
+		}
+		
 		String title = request.getParameter("title");
 		String ctnt = request.getParameter("ctnt");
 			
@@ -83,11 +95,6 @@ public class BoardRegmodSer extends HttpServlet {
 		} else {
 			i_board = MyUtils.parseStrToInt(strI_board);
 			
-			UserVO loginUser = MyUtils.getLoginUser(request);
-			if(loginUser == null) {
-				response.sendRedirect("/login");
-				return;
-			}
 			
 			param.setI_board(i_board);
 			param.setI_user(loginUser.getI_user());

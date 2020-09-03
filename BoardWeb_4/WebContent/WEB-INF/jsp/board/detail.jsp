@@ -10,6 +10,10 @@
 <meta charset="UTF-8">
 <title>내용</title>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+ <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"
+  />
 <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&display=swap');
         * {
@@ -17,6 +21,9 @@
             padding: 0;
             font-family: 'Noto Serif KR', serif;
             font-size: 16px;
+        }
+        *:focus {
+        	outline: none;
         }
         html, body {
             width: 100%;
@@ -213,6 +220,54 @@
 			object-fit: cover;
 			max-width:100%;
 		}
+		.like_cnt {
+			cursor: pointer;
+		}
+		#likeListContainer {
+			/*opacity: 0;*/
+			border: 1px solid #bdc3c7;
+			position: absolute;
+			left: 0px;
+			top: 30px;
+			width: 120px;
+			height: 150px;
+			overflow-y: auto;
+			background-color: white;
+			/*transition-duration : 500ms;*/
+			display: none;
+        	animation: fade_in_show 0.5s normal;
+        }
+        #id_like {
+        	position: relative;
+        	font-size: 1em;
+        }
+        
+        #id_like:hover #likeListContainer {
+        	/*opacity: 1;*/
+        	display: unset;
+        }
+        
+        #likeListContainer:hover {
+        	/*opacity: 1;*/
+        	display: unset;
+        }
+        
+
+        .likeLiskt {
+        	display: flex;
+        	justify-content: center;
+        }
+        
+        @keyframes fade_in_show {
+		     0% {
+		          opacity: 0;
+		     }
+		     100% {
+		          opacity: 1;
+		     }
+		}
+        
+
 		
 
 </style>
@@ -227,8 +282,8 @@
 	                <td width="50px">
                 		<div class="containerpImg">
 							<c:choose>
-				               <c:when test="${item.profile_img != null}">
-				                  <img class="pImg" src="/img/user/${LoginUser.i_user}/${item.profile_img }">
+				               <c:when test="${data.profile_img != null}">
+				                  <img class="pImg" src="/img/user/${data.i_user}/${data.profile_img }">
 				               </c:when>
 				               <c:otherwise>
 				                  <img class="pImg" src="/img/default_profile.jpg">
@@ -247,7 +302,27 @@
 	                	favorite_border
 	                	</c:if>
 	                	</span>
-	                	<span>${like_count }</span>
+	                	<c:if test="${data.like_cnt > 0 }">
+	                	<div id="id_like" class="pointerCursor">
+	                		<span class="like_cnt">${data.like_cnt }</span>
+	                		<!-- 좋아요 표시한 사람 목록 -->
+		                	<div id="likeListContainer">
+	        					<c:forEach items="${likeList}" var="item">
+		        					<div class="likeLiskt">
+		        						<div class="containerpImg">
+		        							<c:if test="${item.profile_img != null}">
+						                  		<img class="pImg" src="/img/user/${item.i_user}/${item.profile_img }">
+						               		</c:if>
+						               		<c:if test="${item.profile_img == null}">
+						               			<img class="pImg" src="/img/default_profile.jpg">
+						               		</c:if>
+		        						</div>
+		        						<span>${item.nm }</span>
+		        					</div>
+	        					</c:forEach>
+	        				</div>
+	                	</div>
+	                	</c:if>
 	                </td>
 	            </tr>
 	            <tr>
@@ -333,6 +408,8 @@
 	            </form>
         </div>
         <!-- 댓글 여기까지 -->
+        
+        
 	</div>
 
 	<script>
@@ -511,9 +588,10 @@
      		txt = txt.replace(new RegExp('${searchText}', 'gi'), '<span style="color: darkgray">' + searchText + '</span>');
      		elCtnt.innerHTML = txt;
      		break;
+     	}     		
      	}
-     		
-     	}
+     	
+     	doHighlight();
         
         
 	</script>

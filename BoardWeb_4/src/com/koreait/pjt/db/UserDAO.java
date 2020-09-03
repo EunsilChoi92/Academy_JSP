@@ -45,7 +45,7 @@ public class UserDAO {
 	}
 	
 	
-	public static int selUser(UserVO param) {
+	public static int login(UserVO param) {
 		
 		String sql = " SELECT i_user, user_pw, nm "
 				+ " FROM t_user "
@@ -79,7 +79,7 @@ public class UserDAO {
 		});	
 	}
 	
-	public static UserVO selUser(int i_user) {
+	public static UserVO selUser(int i_user) { 
 		 String sql = " SELECT user_id, nm, profile_img, email, r_dt "
 		 		+ " FROM t_user WHERE i_user = ? ";
 		 
@@ -144,7 +144,6 @@ public class UserDAO {
 			}
 
 		});
-		
 	}
 
 }

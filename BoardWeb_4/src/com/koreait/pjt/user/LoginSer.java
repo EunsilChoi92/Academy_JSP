@@ -39,7 +39,7 @@ public class LoginSer extends HttpServlet {
 		param.setUser_id(user_id);
 		param.setUser_pw(encrypt_pw);
 		
-		int result = UserDAO.selUser(param);
+		int result = UserDAO.login(param);
 		// 아이디값 지우고 비번 남겨놓고 // 비번 틀렸으면 아이디 
 		if(result != 1) {//에러처리
 			String msg = "";

@@ -28,6 +28,13 @@ public class BoardDetailSer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		UserVO loginUser = MyUtils.getLoginUser(request);
+		if(loginUser == null) {
+			response.sendRedirect("/login");
+			return;
+		}
+		
+		
 		
 		// 글 눌렀을 때 디테일 보이기
 		String strI_board = request.getParameter("i_board");
@@ -44,7 +51,6 @@ public class BoardDetailSer extends HttpServlet {
 		
 		ServletContext application = getServletContext();
 		Integer readI_user = (Integer)application.getAttribute("read_" + strI_board);
-		UserVO loginUser = MyUtils.getLoginUser(request);
 		if(readI_user == null || loginUser.getI_user() != readI_user) {
 			BoardDAO.addHits1(i_board);
 			application.setAttribute("read_" + strI_board, loginUser.getI_user());
@@ -80,13 +86,14 @@ public class BoardDetailSer extends HttpServlet {
 		
 		request.setAttribute("data", data);
 		
-		// 좋아요 숫자 표시
-		int like_count = BoardLikeDAO.selBoardLikeCnt(param);
-		request.setAttribute("like_count", like_count);
-		
 		// comment
 		List<CommentVO> commentList = CommentDAO.selCommentList();
 		request.setAttribute("commentList", commentList);	
+		
+		
+		// 좋아요 누른 사람 목록
+		List<BoardDomain> likeList = BoardLikeDAO.selBoardLikeList(param);
+		request.setAttribute("likeList", likeList);
 		
 		
 				

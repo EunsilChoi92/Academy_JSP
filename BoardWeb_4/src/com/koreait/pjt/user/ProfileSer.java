@@ -29,14 +29,23 @@ public class ProfileSer extends HttpServlet {
 	// 프로필 화면 (나의 프로필 이미지, 이미지 변경 가능한 화면)
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		UserVO loginUser = MyUtils.getLoginUser(request);
+		if(loginUser == null) {
+			response.sendRedirect("/login");
+			return;
+		}
 		
 		request.setAttribute("data", UserDAO.selUser(loginUser.getI_user()));
 		ViewResolver.forward("user/profile", request, response);
 	}
 
+	
 	// 이미지 변경 처리 -> get방식은 못 씀(주소로 이미지 정보를 넘기는 것은 한계가 있으므로)
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		UserVO loginUser = MyUtils.getLoginUser(request);
+		if(loginUser == null) {
+			response.sendRedirect("/login");
+			return;
+		}
 		
 		// 절대경로값/img/user/i_user
 		String savePath = getServletContext().getRealPath("img") + "/user/" + loginUser.getI_user(); // 어플리캐이션.img파일의 realpath

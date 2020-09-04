@@ -8,7 +8,6 @@ public class BoardVO {
 	private int i_user;
 	private String r_dt;
 	private String m_dt;
-	private String nm;
 	private int page;
 	
 	
@@ -60,13 +59,7 @@ public class BoardVO {
 	public void setM_dt(String m_dt) {
 		this.m_dt = m_dt;
 	}
-	
-	public String getNm() {
-		return nm;
-	}
-	public void setNm(String nm) {
-		this.nm = nm;
-	}
+
 	public int getPage() {
 		return page;
 	}

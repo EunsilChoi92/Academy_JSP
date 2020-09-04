@@ -253,7 +253,7 @@
         }
         
 
-        .likeLiskt {
+        .likeList {
         	display: flex;
         	justify-content: center;
         }
@@ -308,7 +308,7 @@
 	                		<!-- 좋아요 표시한 사람 목록 -->
 		                	<div id="likeListContainer">
 	        					<c:forEach items="${likeList}" var="item">
-		        					<div class="likeLiskt">
+		        					<div class="likeList">
 		        						<div class="containerpImg">
 		        							<c:if test="${item.profile_img != null}">
 						                  		<img class="pImg" src="/img/user/${item.i_user}/${item.profile_img }">

@@ -16,6 +16,7 @@ public class BoardDomain extends BoardVO{
 	private int like_cnt;
 	private int cmt_cnt;
 
+	
 	public String getNm() {
 		return nm;
 	}
